@@ -1,0 +1,805 @@
+**1ER SEMESTRE | UPDS | TURMA M1 | AULA: 9**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-036674622-71 | Almeida Da Silva Jéssica Kauany |
+| 2 | I-004665562-09 | Alves Machado Giovanna |
+| 3 | I-034391422-05 | Assunção Pires Gustavo |
+| 4 | I-019412862-83 | Azevedo Santos João Paulo |
+| 5 | 14429007 | Banega Ticona Alejandro |
+| 6 | I-026943172-19 | Barbosa Do Nasciemento Roselane |
+| 7 | I-013313112-25 | Batista Magalhães Isabelle Vitória |
+| 8 | I-676395852-87 | Carvalho Sansão Campinas Franciane |
+| 9 | 12352192 | Curupi Ferreira Ever Junior |
+| 10 | I-549087872-04 | Da Costa De Oliveira Kherwison |
+| 11 | I-017366312-50 | Da Costa Rodrigues Ana Katriny |
+| 12 | I-018360272-22 | da Silva Lessa Alessãmara |
+| 13 | I-073064562-29 | De Lima Alvarani Erika Raquel |
+| 14 | I-033342502-29 | De Sousa Lima Nataniel |
+| 15 | I-058643232-92 | De Sousa Lima Nathália |
+| 16 | I-041013562-38 | De Souza Lopes Camille Vitória |
+| 17 | I-021979502-90 | Ferreira Da Costa Railton |
+| 18 | I-011590102-77 | Figueiredo Barros Thaysla |
+| 19 | 992820702-04 | França Souza Mota Camila |
+| 20 | I-077495842-18 | Gonçalves Da Silva Israel Kennedy |
+| 21 | I-082105762-67 | Lima Costa Lorena |
+| 22 | I-078850382-03 | Macêdo Costa Emilly Cristine |
+| 23 | 8431962 | Medina Uechi Fabiana |
+| 24 | I-071507162-96 | Mendes Batista Jeferson |
+| 25 | I-024761292-83 | Menezes De Araújo Edvania |
+| 26 | 029434402-05 | Menezes Marques Grazielle |
+| 27 | I-002697562-99 | Monteiro De Lima Naiara |
+| 28 | I-021462282-70 | Murbach Jhonatan |
+| 29 | I-065459522-42 | Nascimento Leitão Mateus |
+| 30 | I-032600572-26 | Nogueira de Castro Paulo Vinícius |
+| 31 | I-700235822-78 | Oliveira Laurentino Fhelipe |
+| 32 | I-041413122-31 | Pereira De Albuquerque Amanda |
+| 33 | I-004333272-27 | Pereira de Andrade Michael |
+| 34 | I-068020022-30 | Pinheiro Da Silva Lethicia Das Neves |
+| 35 | 5714311 | Saavedra Gutierrez Jany Neusa |
+| 36 | 5707799 | Saavedra Pereira Aalysha |
+| 37 | I-061480512-06 | Salvador Rodrigues da Silva Hináh Letícia |
+| 38 | I-069969522-80 | Silva De Souza Alice Vitória |
+| 39 | I-085782842-83 | Silva Dos Santos Matheus |
+| 40 | I-060857382-50 | Silva Dos Santos Ranna Clara |
+| 41 | I-045655202-22 | Silva Souza Maria Clara |
+| 42 | I-067530112-26 | Simões Da Hora Larissa |
+| 43 | I-702403492-02 | Suzuki Paiva Letícia |
+| 44 | 15263305 | Uruchi Hurtado Juan David |
+| 45 | E-61481839-1 | Vargas Huillca Katherine Alexandra |
+| 46 | I-077648992-59 | Vasconcelos Dos Santos Theylor Wendrel |
+| 47 | I-041015382-63 | Vaz De Souza Lauanna Vitória |
+| 48 | I-824497832-53 | Vidal De Lima Fabiana Maria |
+| 49 | I-067680742-96 | Viégas Nunes Domingues Laura |
+| 50 | 13108328 | Zambrana Sánchez Eliana Gissel |
+| 51 | I-703812252-59 | Amaral De Amorim Vanessa |
+| 52 | E-61537383-0 | Cahua Sotomayor Hade Soledad |
+| 53 | 4200111 | Domínguez Ecuari Jordania |
+| 54 | I-024254532-70 | Ferreira Da Silva Weverson |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA M2 | AULA: 2**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | 16348019 | Amorin Alvarez Dianne |
+| 2 | I-004365992-60 | Azevedo Castro Da Silva Yasmin Vitória |
+| 3 | I-074522032-08 | Barrozo Damasceno Maria Clara |
+| 4 | 5709839 | Bazoalto Orozco Dallys Guadalupe |
+| 5 | GG773237 | Brito de Almeida Júnior José Carlos |
+| 6 | E-61481452-2 | Chavez Huaman Alex Guillermo |
+| 7 | I-494919988-97 | Conceição De Oliveira Kamilly Victória |
+| 8 | I-167335867-54 | Costa Moreira Thalyta |
+| 9 | I-045865182-60 | Cunha Rosa Cristian Maik |
+| 10 | I-099204852-41 | Da Silva Moraes João Victor |
+| 11 | I-079234852-40 | Da Silva Oliveira Elison Vitor |
+| 12 | I-079899182-85 | Da Silva Oliveira João Joaquim |
+| 13 | I-040749382-43 | De Aquino Correa Braga Luiz Fernando |
+| 14 | I-027733642-28 | De Araújo Maia Jamily |
+| 15 | I-077926792-33 | De Azevedo Pinheiro Mariana |
+| 16 | I-702378202-85 | De Lima Rios Ludimila |
+| 17 | I-065449472-02 | De Oliveira Camargo Cabral Guilherme |
+| 18 | I-985568192-49 | De Oliveira Nassif Martha Helena |
+| 19 | 024668252-36 | De Sena Coutinho Marcos Bruno |
+| 20 | I-053703152-99 | de Souza Araújo Antonio José |
+| 21 | I-052760282-57 | Dos Santos Damasceno Isadora |
+| 22 | I-070614282-95 | Feitosa Da Silva Jocastra |
+| 23 | 5705265 | Flores Jimenez Raysa Shantal |
+| 24 | I-037758802-40 | Galvão De Souza Aires Davi |
+| 25 | I-703825762-50 | Gomes Mendes Elissamyla |
+| 26 | I-020231322-07 | Gonçalves Campelo Kaylla Lorrany |
+| 27 | 12852249 | Gosalvez Tupa Jesus Gabriel |
+| 28 | I-080749992-70 | Jesus Oliveira Thainá |
+| 29 | I-033623412-09 | Lima Da Silva Lara |
+| 30 | I-039634212-40 | Lubiana De Moura Maria Eduarda |
+| 31 | I-080438202-60 | Lucena De Oliveira Mário Vítor |
+| 32 | I-068468762-35 | Marques Muniz Eduardo |
+| 33 | I-080524982-60 | Medeiros De Souza Junior Gerson |
+| 34 | I-080333592-00 | Medeiros Martins Isabella |
+| 35 | I-002068082-16 | Mendonça Ribeiro Miranda Ilana Patrícia |
+| 36 | I-081586772-74 | Moura Da Silva Willian Gabriel |
+| 37 | I-075266492-12 | Oliveira Coelho Anna Luiza |
+| 38 | I-024062492-04 | Panéia Soriano Da Silva Zafenate |
+| 39 | 12692023 | Paruma Sobrino Diana Pamela |
+| 40 | I-050295222-98 | Pedroso Veras Marcus Aurélio |
+| 41 | I-143405966-98 | Pereira Lamarão Xavier Ester Benigna |
+| 42 | I-079679222-47 | Pinto Peres Elane Larissa |
+| 43 | I-047997442-08 | Queiroz Lima Lobato Ada Beatriz |
+| 44 | I-241981608-05 | Romas Castillo Daniel David |
+| 45 | I-023941222-26 | Santos Alencar Thauan |
+| 46 | I-701304512-82 | Santos De Souza Maria Clara |
+| 47 | I-070443862-37 | Silva De Melo Larissa |
+| 48 | I-522271112-91 | Soares Da Silva e Silva Sabrina |
+| 49 | I-039220472-03 | Teixeira Nascimento Andressa Layna |
+| 50 | I-048169852-39 | Vieira Brito Lucas José |
+| 51 | 13108452 | Isita Molina Arianne Sharid |
+| 52 | I-090348172-37 | De Souza Sena Pedro Henrique |
+| 53 | I-935309002-49 | Cunha Fassabe Roseane |
+| 54 | I-051456972-72 | Pires Da Silva Lidiane |
+| 56 | I-026649612-17 | Rodrigues Canuto Maciel Caroline |
+| 57 | I-00314735208 | Jerônimo Dos Santos Silva Câssio |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA M3 | AULA: 3**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-009130502-02 | Albuquerque E Silva João Eduardo |
+| 2 | I-020657802-40 | Amorin Santos Weslly |
+| 3 | 14116378 | Ampuero Santiago Clara |
+| 4 | I-700534372-76 | André Da Silva Tainá |
+| 5 | I-025674052-67 | Araújo De Souza Lorrany |
+| 6 | I-024261275-52 | Arruda De Sousa Andreia Sara |
+| 7 | I-005906942-27 | Beckmann Vieira De Melo Beatriz |
+| 8 | I-037790582-86 | Bernardo Gonçalves Luana Bernardo |
+| 9 | 7647045 | Carvallo Guataica Narda Elienai |
+| 10 | I-024701732-99 | Chaves De Queiroz Rafael |
+| 11 | I-104828562-62 | Coimbra Prais Dheimilly |
+| 12 | I-067889761-01 | Da Silva Pereira Amanda Veronica |
+| 13 | I-052620052-92 | De Aguiar Alves Hiago |
+| 14 | I-086424202-60 | De Aguiar Lindozo Lanna Ketly |
+| 15 | I-021024722-30 | De Araújo Lima Iana Sara |
+| 16 | I-038217542-57 | De Brito Araújo Felipe Gabriel |
+| 17 | I-079565672-62 | De Castro Lopes Renato |
+| 18 | I-081703992-97 | Do Lago Vieira Juliany |
+| 19 | I-052759582-93 | Dos Santos De Lima Yara |
+| 20 | I-076677812-65 | Dos Santos Miranda Maria Eduarda |
+| 21 | I-015629272-64 | Dourado Rodrigues Layla Ivaniely |
+| 22 | I-015870422-31 | Felisberto De Oliveira Francisca Lariany |
+| 23 | I-055195092-71 | Ferreira Batista Melissa |
+| 24 | I-033250492-14 | Ferreira Moreira Gessina Letícia |
+| 25 | I-038180862-90 | Fontes Ribeiro Marcus Henrique |
+| 26 | I-086711802-47 | Fontineles De Araújo Kemily |
+| 27 | I-057950042-00 | Gonçalves Mendes Cleiton |
+| 28 | I-036212872-30 | Jerônimo Batista Yasmim |
+| 29 | I-067602222-70 | Kurzvski Dionisio Ana Beatriz |
+| 30 | I-028756802-42 | Lima De Oliveira Torres Jacksandra |
+| 31 | I-030270852-98 | Lourdes Ribeiro Alannis Victória |
+| 32 | I-054574032-03 | Lyra Dos Santos Marcos Henry |
+| 33 | I-065506942-99 | Maciel Weseu Cibele Vitória |
+| 34 | I-071507692-25 | Marques De Brito Yasmin |
+| 35 | 5706552 | Martinez Calle Yeiky Junior |
+| 36 | I-075400392-21 | Nogueira De Freitas Rhyan |
+| 37 | I-704955382-48 | Oliveira Dias Sandy |
+| 38 | I-037054602-42 | Pereira Do Carmo Débora Emily |
+| 39 | I-036614542-85 | Queirós Oliveira Maria da Liberdade |
+| 40 | I-030270782-40 | Ribeiro Aylon Victor |
+| 41 | 100168742-69 | Rodrigues De Lima Jardson |
+| 42 | I-009998202-14 | Silva Barbosa Wanderson |
+| 43 | I-077729382-09 | Silva Cesar Kaxarari Ruan |
+| 44 | I-703044432-98 | Silva De Noronha Ana Livia |
+| 45 | I-088426972-81 | Soares Ferraz Letícia |
+| 46 | I-055600312-82 | Souza Silva Carlos Eduardo |
+| 47 | 4208736 | Suarez Alfaro Leandro Ricardo |
+| 48 | I-020876292-26 | Tavares De Oliveira Geovana |
+| 49 | I-934753142-15 | Torres Frota Kelwin |
+| 50 | I-061677872-47 | Vasconcelos Beiruth Guilherme |
+| 51 | 14662612 | Gonzales Ruiz Richard Josue |
+| 52 | E-76059339-2 | Paredes Vilca Edgar Luis |
+| 53 | 12756017 | Veintemillas Gonzáles Juan Javier |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA M4 | AULA: 4**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-042057362-31 | Almeida Zucoloto Adriel |
+| 2 | I-844197762-34 | Barroso Dos Santos Francisca Gleicia |
+| 3 | I-098694192-16 | Batista De Lima Nobrega Miquéias |
+| 4 | I-072385542-08 | Carlos Da Silva Tânia |
+| 5 | I-068709862-90 | Castro Ferreira Ananda Alessa |
+| 6 | 12596244 | Cordova Nacimento Keyfer Reynaldo |
+| 7 | I-078758162-38 | Costa Roca Saulo Dean |
+| 8 | I-024104162-76 | Cruz Amaral Gabriel |
+| 9 | I-076608632-00 | Da Silva Guedes Kethalin |
+| 10 | I-102694062-12 | Da Silva Martins Luana Elis |
+| 11 | I-036241502-19 | Da Silva Medina Melo Anaisa |
+| 12 | I-067863072-05 | Da Silva Almeida França Daiemilly Victorya |
+| 13 | I-025932-332-22 | De Brito Maciel Rafael |
+| 14 | I-108186702-74 | De Castro Lopes Julio Cesar |
+| 15 | I-010874622-40 | De Oliveira Guimarães Nathanye |
+| 16 | I-700453862-18 | De Oliveira Pinheiros Vinícius |
+| 17 | I-014763622-11 | De Oliveira Santana Jéssica |
+| 18 | I-860156482-87 | De Oliveira Souza Herbth |
+| 19 | I-552023938-06 | De Souza Santos André Hilquias |
+| 20 | I-068739992-02 | Domingos De Souza Maria de Jesus |
+| 21 | I-025443202-65 | Dos Santos Cavalcante Rodrigues Luiz Antonio |
+| 22 | I-054879882-69 | Gomes Alves Lucas |
+| 23 | I-700296642-17 | Gomes De Albuquerque Francisco Wesley |
+| 24 | I-081253192-20 | Guimarães Netto Gilson José |
+| 25 | I-114362414-99 | José da Silva Andemarys |
+| 26 | I-082966332-05 | Lima De Moraes José Guilherme |
+| 27 | I-37515582-17 | Lira Do Nascimento Cleiciane |
+| 28 | I-106869222-71 | Lopes Batista Talita Kémile |
+| 29 | I-068089332-60 | Maciel Araújo Wendel Jeremias |
+| 30 | I-070657492-31 | Martins Feitosa Neto Carlos |
+| 31 | I-047608222-67 | Melo Alves Ana Gabriele |
+| 32 | I-035675522-36 | Melo De Lima Sirney |
+| 33 | I-015524462-04 | Moreira Da Silva Maria Eduarda |
+| 34 | 14337198 | Nina Roca Alexander |
+| 35 | I-071578292-40 | Oliveira Moraes Antônia Kailanny |
+| 36 | I-015382282-11 | Paiva De Lima Miguel Bruno |
+| 37 | I-526226062-49 | Passos Lima Mayra |
+| 38 | I-13601989 | Pereira Dos Santos Tamiris |
+| 39 | I-043785062-54 | Pereira Laurentino Ian |
+| 40 | I-085467712-78 | Rames Da Silva Thony |
+| 41 | I-071028372-59 | Ribeiro De Oliveira Micaely |
+| 42 | I-058497542-29 | Sampaio De Souza Kauany |
+| 43 | I-029757732-85 | Santos De Oliveira Felipe |
+| 44 | I-091601942-00 | Sena Reis Matheus |
+| 45 | I-065437532-18 | Silva De Melo Ashley |
+| 46 | I-703788482-08 | Silva Vivan Ane Tamyres |
+| 47 | I-037049832-17 | Stecca Grassi Júlia |
+| 48 | I-051785032-01 | Tabosa Lucena Laura Daphny |
+| 49 | I-042464802-40 | Teles Da Silva Júlia |
+| 50 | 12725183 | Von Boeck Sanchez Maria Gladys |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA M5 | AULA: 14**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-069274462-22 | Aguiar Fernandes Isadora |
+| 2 | I-022654092-86 | Camurça De Souza Luiz Felipe |
+| 3 | E-63780781 | Carrero Oblitas Greys Tatiana |
+| 4 | I-703416172-02 | Carvalho Ribeiro Kellyana |
+| 5 | I-809340212-87 | Chaves Vilhamor Glaucia Greyciane |
+| 6 | I-079739742-61 | Costa Barros Estefany Luiza |
+| 7 | I-064526142-40 | Costa Ferreira Isis Gabriely |
+| 8 | I-067532672-59 | Da Costa Melo Marcos Cauê |
+| 9 | I-067715202-77 | Da Silva Ferreira Aline Cristina |
+| 10 | I-087590432-70 | Da Silva Gomes Josué |
+| 11 | I-033078582-62 | Da Silva Gonçalves João Eduardo |
+| 12 | I-054574172-63 | Da Silva Miranda Sara |
+| 13 | I-063601992-62 | Da Silva Nascimento Anderson |
+| 14 | I-010075612-38 | Da Silva Sales Brenda Raquel |
+| 15 | I-096551552-42 | de Brito Leite Eduardo Messias |
+| 16 | I-062561932-37 | De França Barroso João Gabriel |
+| 17 | I-922800482-72 | De Freitas Moura Francisco Átila |
+| 18 | I-079536952-27 | de Menezes Lima Gisele |
+| 19 | I-702350802-33 | De Oliveira Cardoso Carolinda |
+| 20 | I-087847992-93 | De Souza Cerqueira Ruan Bryan |
+| 21 | I-052188802-64 | Do Nascimento Silva Luiz Henrique |
+| 22 | I-026651172-40 | Farias de Araújo Ellen Kewry |
+| 23 | I-026874492-02 | Fernandes De Lima Maria Lucia |
+| 24 | I-048189252-41 | Honorio De Jesus Ana Clara |
+| 25 | I-070570432-79 | Lara Oliveira Rebeca |
+| 26 | I-070791112-50 | Miranda Do Nascimento Izabelle |
+| 27 | I-705176952-94 | Monteiro Da Rocha Glória Maria |
+| 28 | I-054368612-45 | Moura Sousa João Enrico |
+| 29 | I-098691442-84 | Pimentel Amorim Anna Luiza |
+| 30 | I-062960732-08 | Rauber De Alencar Bhadra Beatryce |
+| 31 | I-074559052-70 | Rodrigues Lima Puyanawa Yan Bernardo |
+| 32 | I-702942812-90 | Rodrigues Moura Iorrana Caroline |
+| 33 | I-001006812-04 | Saraiva Dos Santos Ingra Suayanne |
+| 34 | I-057029162-39 | Silva De Sousa Darlyson |
+| 35 | I-084645262-61 | Silva Lima Emely Kauana |
+| 36 | I-069663932-74 | Soares Lopes Naíra |
+| 37 | I-051675082-82 | Souza Damázio Kauany |
+| 38 | I-034588842-11 | Souza Ferreira Kaylany |
+| 39 | I-079742442-32 | Souza Resende Rayanny |
+| 40 | E-60680315 | Vasquez Aguilar Anthoane Estrella |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA M6 | AULA: 18**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-036447182-45 | Andrade Júnior Joais |
+| 2 | I-105334122-93 | Araújo Albuquerque Loayza Vitória |
+| 3 | I-06133861240 | Barahuna Bezerra Neto Antonio Ademar |
+| 4 | I-023173162-08 | Barroso De Souza Pietra |
+| 5 | I-058561952-21 | Borges De Mello Miguel |
+| 6 | I-052616872-25 | Brandão Da Costa Sthefany Karoliny |
+| 7 | 12916141 | Carlo Yepes Victor Daniel |
+| 8 | I-039289222-70 | Castro Fontinele Yarleson |
+| 9 | I-022791582-80 | Correia Da Silva Vitória Eduarda |
+| 10 | I-017399942-56 | Da Costa Araújo Andressa |
+| 11 | I-020279062-23 | Da Costa Silva Flavia |
+| 12 | I-526066192-34 | Da Silva Junior Carlos |
+| 13 | I-006114512-20 | Da Silva Jaminaua Alves Marinete |
+| 14 | I-069158932-10 | De Castro Silva Murilo |
+| 15 | I-061595662-96 | De Lima Meireles De Medeiros Libni |
+| 16 | I-017492922-62 | Farah Medeiros Farah Sayid |
+| 17 | I-022633102-40 | Ferreira De Sá Arthur Felipe |
+| 18 | I-071893582-84 | Gomes De Lima Lucas |
+| 19 | I-021045032-05 | Gonçalves De Oliveira Jaqueline |
+| 20 | I-074159132-48 | Lima Pedroza Izzy Emmanuela |
+| 21 | I-00945490283 | Magalhães da Mota Matheus |
+| 22 | 5708384 | Mariño Cachi Karen Nicol |
+| 23 | I-771409902-04 | Mendes Brasil Da Silva Enio |
+| 24 | I-038439032-39 | Mendes Dos Santos Layla Nikan |
+| 25 | I-038439002-13 | Mendes Dos Santos Luis Otávio |
+| 26 | E-61481403-4 | Otsuka Velasquez Diego Xavier |
+| 27 | I-091265711-10 | Peres De Castro Gabriel |
+| 28 | I-087345752-86 | Petter De Oliveira Anna Clara |
+| 29 | 5715697 | Reis Claure Caleb |
+| 30 | I-050193562-20 | Rocha Da Silva Enzo Cândido |
+| 31 | I-065507842-80 | Rocha Anute Dos Santos Ana Sara |
+| 32 | I-07002737279 | Silva De Lima Ezila |
+| 33 | I-921750582-04 | Silva De Souza Adriane |
+| 34 | I-702921474-90 | Soares Gomes Allana |
+| 35 | I-066437492-12 | Souza Paulino Emilen |
+| 36 | 5708392 | Subtil Bello Luciana |
+| 37 | E-61080362 | Vasquez Yauyos Ross Itzel |
+| 38 | I-62028638 | Ynuma Huanacuni Milagros Nicol |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA M7 | AULA: 16**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-126061107-81 | Alves Da Silva Heraldo |
+| 2 | I-049852242-35 | Araújo Da Silva Ederson Ariel |
+| 3 | I-047211782-39 | Azevedo Da Silva João Samuel |
+| 4 | I-031396712-48 | Bezerra dos Santos Gabriel |
+| 5 | I-039625002-51 | Bezerra dos Santos Jorge Henrique |
+| 6 | GJ694128 | Cardoso Silva Gabriel |
+| 7 | 13012377 | Chamarro Barboza Keehtnnee Ariana |
+| 8 | I-008146972-16 | Coli Costa Felipe |
+| 9 | I-023292882-71 | Constância Menezes dos Santos Lorrany |
+| 10 | I-11331275 | Da Costa Simone Maria |
+| 11 | I-001411932-39 | Da Silva Aguiar Gabriel |
+| 12 | I-024620202-50 | Da Silva Coelho Talita |
+| 13 | I-012841762-58 | Da Silva Rodrigues Ana Alice |
+| 14 | I-006328902-40 | De Brito Leite Mizael |
+| 15 | I-084705522-10 | Do Vale Fiuza Geovana |
+| 16 | I-088909332-67 | Dos Santos Donovan Ferreira Ana Pietra |
+| 17 | I-702559252-80 | Duarte Maia Rílari Lorrana |
+| 18 | I-951174152-72 | Felix Mourão Francisco Edson |
+| 19 | I-07096107266 | Freitas de Oliveira Cawã Victor |
+| 20 | I-080991902-89 | Galvão da Silva Vinicius Lohan |
+| 21 | I-042707222-07 | Jesus Lima Altevir |
+| 22 | I-097488082-54 | Lima Benjamin Kawã Victor |
+| 23 | I-009003362-00 | Lopes Rocha Vinícios |
+| 24 | I-034709742-17 | Maciel De Menezes Adriel |
+| 25 | 5718183 | Mamani Nortes Nicol Varinnia |
+| 26 | I-038893132-99 | Marques Lucas |
+| 27 | I-832003202-49 | Marquez Bezerra Henrique |
+| 28 | I-654390072-53 | Morais Da Fonseca Luiz Augusto |
+| 29 | I-05827633208 | Pereira de Souza Marcos Vinícius |
+| 30 | I-063041382-70 | Ribeiro De Oliveira Kemylly |
+| 31 | I-025789542-67 | Sage Brilhante Nayne |
+| 32 | I-033685602-47 | Santos De Morais Ediclei |
+| 33 | I-086118342-83 | Silva Nascimento Thamara Valesca |
+| 34 | I-070896882-16 | Souza Silva Pedro Vinícius |
+| 35 | I-037202722-90 | Venâncio Suarez Monaliza |
+| 36 | I-061983512-54 | Vasconcelos dos Santos Jhemilli Lohani |
+
+---
+	
+
+**1ER SEMESTRE | UPDS | TURMA T1 | AULA: 9**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-700228652-84 | Almeida da Silva Sandro Domingos |
+| 2 | I-06530315217 | Borges Mello Rafael |
+| 3 | I-1158750-4 | Braga Magalhaes Lobo Leticia Vitoria |
+| 4 | I-008146972-16 | Coli Costa Felipe |
+| 5 | I-082684712-98 | Costa Jaen Néliva Caroline |
+| 6 | I-011289282-56 | Da Silva Conceição Maria Fabiola |
+| 7 | I-904504002-63 | da Silva Ferreira Juninho |
+| 8 | I-709835394-99 | De Lima Florencio Juliana Manoela |
+| 9 | I-028147362-56 | De Oliveira Melo Juníor Ronnei |
+| 10 | I-025810382-50 | De Souza Lopes Antonio Lucas |
+| 11 | I-834216292-34 | Felizardo do Nascimento Adriana |
+| 12 | I-706868132-86 | Fermino Dos Santos Laryssa |
+| 13 | I-051729962-30 | Ferreira da Silva Kellyton |
+| 14 | I-061172772-29 | Ferreira De Oliveira Victor Hugo |
+| 15 | 4209279 | Flores Muiba Gabriel |
+| 16 | I-70798323221 | Fonseca Soares Yasmin Hewellen |
+| 17 | 06513703512 | Gadelha Hassem Jussara |
+| 18 | I-027013562-61 | Gurgel De Almeida Elisa Cristina |
+| 19 | I-078640452-35 | Leandro dos Santos Sarah Nayanne |
+| 20 | I-045509482-99 | Lima Do Nascimento Juciene Bruniele |
+| 21 | I-009922602-21 | Loureiro Barbosa Maria Clara |
+| 22 | I-061044162-09 | Matos De Freitas Victor Hugo |
+| 23 | I-031989112-73 | Nascimento Da Silva Ana Luzia |
+| 24 | I-066887941-60 | Nascimento De Souza Amanda |
+| 25 | I-039362392-07 | Oliveira da Conceição Thaylana |
+| 26 | I-009659172-23 | Oliveira Tessinari De Sousa Breno |
+| 27 | I-YC579514 | Paulino Freire Gabriela |
+| 28 | I-071409762-44 | Rivas Condorhuaman Maria Esmeralda |
+| 29 | E-61303969 | Rocca Zamata Luis Antonio |
+| 30 | I-050525742-40 | Rodrigues Junior Matias |
+| 31 | I-163533634-19 | Santos de Paiva Luis Fernando |
+| 32 | I-434770202-78 | Severino Bandeira Charles |
+| 33 | I-039734242-09 | Soares da Silva Jheimes Henrique |
+| 34 | I-535430682-53 | Souza De Almeida D'avila |
+| 35 | I-705801782-42 | Tabosa Da Costa Yorrana Cristine |
+| 36 | I-023074552-05 | Vieira Castro Kamilla Kerolaine |
+| 37 | I-04599566209 | Aredes dos Santos Silvia Lorrana |
+| 39 | I-08119442202 | Dos Santos Aguiar Maria Eduarda |
+| 40 | I-00314735208 | Jerônimo Dos Santos Silva Câssio |
+| 41 | I-017750842-64 | Melo Lima Daniela |
+| 42 | I-11045067261 | Menezes de Lima Vitoria |
+| 43 | I-03268170269 | Amaral de Menezes Maria Rita |
+| 44 | I-04029245204 | Bento Gadelha Joao Pedro |
+| 45 | E-13815229 | Lima De Oliveira Luiz Gustavo |
+| 46 | 12756020 | Roca Roca Thiago |
+| 47 | I-060227432-06 | Bruno Aguiar Kethelem |
+| 48 | I-02860044299 | Guerra da Silva Wellington |
+| 49 | I-006535752-38 | Lima De Souza André Ricardo |
+| 50 | I-091927952-00 | Roth Juvencio Chaya Cecília |
+| 52 | I-056916792-28 | Barros Cavalcante Joao Pedro |
+| 53 | I-036310732-08 | Da Silva Amorim Kaua Adriano |
+| 54 | I-09164115240 | Moura Duarte Wendyla |
+| 55 | I-021051562-74 | De Souza Dantas Yasmim |
+| 56 | I-068344372-07 | De Souza Mendes Brian Lucas |
+| 57 | I-61481507 | Gonzales Silva Diana |
+| 58 | I-923602542-00 | Oliveira Brito Saidriana |
+| 59 | I-075628942-48 | MARIA APARECIDA FREITAS REIS |
+| 60 | I-762536432-15 | Luiz Carlos Rodrigues Gonçalves |
+---
+
+**1ER SEMESTRE | UPDS | TURMA T2 | AULA: 2**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-881072642-15 | Alegre Brito Dhiego Malone |
+| 2 | I-703795492-63 | Almeida Da Silva Fabrícia |
+| 3 | I-022686812-54 | Andrade De Melo Andrew |
+| 4 | I-08268474203 | Bandeira Mendes Anna Júllya |
+| 5 | I-037714062-77 | Bernardes Nazarét Diego |
+| 6 | I-071598012-29 | Bosa De Almeida Kayo Leonardo |
+| 7 | I-044517942-26 | Cardoso de Oliveira Lowany Ket'llyn |
+| 8 | I-068406602-57 | Cardoso De Souza Ana Luiza |
+| 9 | I-018499282-66 | Cariolano De Souza Maria Janete |
+| 10 | I-012567522-40 | Carvalho De Freitas Ninna |
+| 11 | I-045547512-10 | Chaves Anute Filho Nabib |
+| 12 | I-045025682-01 | Chaves Ferreira Isabely |
+| 13 | I-812652042-68 | Coelho Lopes Diego Douglas |
+| 14 | I-110093702-19 | Da Silva Vaca Dieisiane |
+| 15 | I-060962482-25 | De Oliveira Lima Crislen |
+| 16 | I-07316624230 | De Souza Messias Ana Cibelli |
+| 17 | I-083997235-09 | Dias Rodrigues Theo Bryan |
+| 18 | E-17819675 | Fante Brambila De Andrade Vilma |
+| 19 | I-025087752-07 | Ferreira Felicidade Emilly Paula |
+| 20 | I-020558202-81 | Ferreira Roque Gomes Gloria Maria |
+| 21 | I-026427422-96 | Fuzari Neves Felipe |
+| 22 | I-049051652-10 | Galli Ferreira Udson Bruno |
+| 23 | I-047845402-37 | Goes De Lima Camila |
+| 24 | I-055106622-98 | Goncalves Moura Wesley |
+| 25 | E-61370845-1 | Huaman Cipriano Cristofer Edgar |
+| 26 | I-062360962-28 | Jesus Souza Letícia Beatriz |
+| 27 | I-036218022-90 | Lemos De Menezes Jaine |
+| 28 | I-072051072-45 | Lima Almeida Juan Pablo |
+| 29 | I-023351942-40 | Lopes Da Silva Kauan Lucas |
+| 30 | I-050535562-02 | Lopes Fontana Dhonatan Tailer |
+| 31 | I-058842442-07 | Mendonça da Silva Yasmim |
+| 32 | I-070345342-41 | Miceli Pascoal Giovanna Potyra |
+| 33 | 14694077 | Mollisaca Apaza Thiago Marcos |
+| 34 | I-026673452-90 | Moura Anute Andresa |
+| 35 | I-045547732-99 | Moura Anute Andriny |
+| 36 | I-073309712-00 | Moura Da Silva Erika |
+| 37 | I-025504932-30 | Noronha De Souza Dirciane |
+| 38 | I-042496922-05 | Oliveira Costa Sampaio Livia |
+| 39 | I-076844002-58 | Pinheiro Soares Wálison |
+| 40 | I-012567951-35 | Rebouças Dias Lygia |
+| 41 | I-036179492-40 | Rebouças Dias Alves Santos Esther |
+| 42 | 7644757 | Roca Suez Paulina |
+| 43 | I-037776042-08 | Rocha Borges De Oliveira Yasmim |
+| 44 | I-014370352-80 | Rosa Flores Elaine |
+| 45 | I-704930582-06 | Santos De Oliveira Carlos Henryque |
+| 46 | I-077392923-11 | Silva de Souza Isabely |
+| 47 | I-050575052-03 | Souza Castelo Branco Evellyn Lis |
+| 48 | I-024214652-06 | Tavares Barroso Ian Gilbert |
+| 49 | 12442213 | Tibubay Flores Yilian Anyelica |
+| 50 | I-028950382-52 | Viana da Silva João Víctor |
+| 51 | 12756020 | Roca Roca Thiago |
+| 52 | I-064966552-00 | De Souza Ane Victória |
+| 53 | I-026453872-25 | Da Costa Correia Alef |
+| 54 | I-797492752-68 | De Souza Moreno De Castro Maria Alda |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA T3 | AULA: 3**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-048435362-45 | Aiache Alves Vinícius |
+| 2 | 14306834 | Alvarez Zelada Tayara |
+| 3 | I-038640432-12 | Alves Silva Krysna Karen |
+| 4 | I-027549792-55 | Amaral Brizola Amanda |
+| 5 | I-000914122-77 | Amaral Brizola Maria Eduarda |
+| 6 | I-040768302-02 | Aquino Bezerra da Fonseca Kaillon |
+| 7 | I-066888492-40 | Araújo Fontenele Kalyl |
+| 8 | 4217074 | Argandoña Rodrigues Fabiana Nichel |
+| 9 | I-045453232-60 | Arruda De Andrade Marcela |
+| 10 | I-719482602-04 | Barbosa Dantas Luciane |
+| 11 | I-841979192-04 | Barros Júca Francisco |
+| 12 | I-010882362-86 | Campos Ferreira Luzia Luana |
+| 13 | I-11073888 | Coimbra Fiesca Ytalo Luan |
+| 14 | I-11341386 | Da Silva Pereira Daniel |
+| 15 | I-049262592-14 | Da Silva Soares Luiz Felipe |
+| 16 | I-035439682-03 | Da Silva Sobralino Nobre Sígrid |
+| 17 | I-073565452-25 | Da Silva Souza Bernardo Navarro |
+| 18 | I-015811022-67 | D'ávila França Oliveira Giovanna |
+| 19 | I-029068501-01 | De Almeida Lopes Antonio Washington |
+| 20 | I-097149382-32 | De Lima Dias Gabriel |
+| 21 | I-061249142-04 | De Melo Cavalheiro Sara |
+| 22 | I-710047262-87 | De Oliveira Braga Nalurdes |
+| 23 | I-079468842-06 | De Oliveira Limeira Áglison Kubitschek |
+| 24 | I-069797171-62 | De Souza Link Isadora |
+| 25 | I-050634012-01 | Dias Estefany Paola |
+| 26 | I-012401142-06 | Dos Santos Antrobos John Mayko |
+| 27 | 6541899 | Fernandez Andia Alejandro Franz |
+| 28 | I-068813152-28 | Ferreira Gonçalves Isabelly |
+| 29 | I-042122082-10 | Gomes Menezes Antrobos Carla |
+| 30 | I-021850702-07 | Lima Dantas Luana |
+| 31 | I-032951272-20 | Lima E Lima Lissandro |
+| 32 | I-084886702-57 | Lopes Medalha Rhuana Evelyn |
+| 33 | I-022112472-10 | Magalhães Braga Neto José Delis |
+| 34 | 080898832-81 | Marinho de Lima Kawã |
+| 35 | I-937771322-68 | Marques De Almeida Davi Gustavo |
+| 36 | I-104907881-06 | Moura Ribeiro Maria Luiza |
+| 37 | I-066673462-31 | Olindo Dos Santos Kauany |
+| 38 | 13340984 | Pacolla Luque Arley Katia |
+| 39 | I-071404992-17 | Paes Souza Klauss Kayke |
+| 40 | 5704128 | Pedraza Calcina Rilda Jerusalen |
+| 41 | I-021125062-77 | Pinheiro Da Silva Yara Vitória |
+| 42 | I-018897902-65 | Rocha Souza Ísis Vitória |
+| 43 | 049059292-96 | Silva De Queiroz Ivan José |
+| 44 | I-094357932-58 | Silva De Souza Iury |
+| 45 | I-041569972-00 | Silva Jardim Athos Marcos |
+| 46 | I-042989212-80 | Soares Dos Santos João Mateus |
+| 47 | I-049445862-30 | Sousa Costa Izabel |
+| 48 | I-700972951-40 | Teixeira De Moraes Caio |
+| 49 | I-073624182-56 | Teixeira Ramalho Ana Gabriele |
+| 51 | I-037788242-95 | Araujo Rodrigues Marcos Venicius |
+| 52 | 4207294 | Cardon Quispe Cristian Ivan |
+| 53 | I-06120153276 | Lofe da Silva Lorena |
+| 54 | I-041491672-73 | Da Silva Souza Dionata |
+| 55 | E-60860213 | Humpire Torres Matehus Walter |
+| 56 | E-61195635 | Torres Lopez Maria Jesus Auria |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA T4 | AULA: 15**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-974559542-04 | Albuquerque De Souza Yuri |
+| 2 | I-032374322-61 | Amaral Neto Emílio |
+| 3 | I-067930A | Araújo Feitosa Anderson Rikelvi |
+| 4 | I-04065104238 | Araújo Fontenele Blenna Khetrilyn |
+| 5 | I-095120932-94 | Araújo Fontinele Lucicleudo |
+| 6 | I-038896192-90 | Candido Chaves De Araújo Karen Ariele |
+| 7 | I-991610012-87 | Conceição De Azevedo Ana Maria |
+| 8 | 4207531 | Cuellar Becerra Walter Silvestre |
+| 9 | I-1309666-4 | Da Silva Franco Oliveira Taiane |
+| 10 | I-047205072-98 | Da Silva Oliveira Cauã Henrique |
+| 11 | I-921810822-00 | Da Silva Pinheiro Luis Felipe |
+| 12 | I-994374142-20 | Da Silva Queiroz Erinalda |
+| 13 | I-039497042-05 | De Souza Nunes Yasmin |
+| 14 | I-041258072-13 | Dourado Leite Antônio Lucas |
+| 15 | I-945088442-00 | Ferreira Da Silva Patrielly |
+| 16 | I-069217852-03 | João Silva Neto Williams |
+| 17 | I-604297392-49 | Laurentino Lopes Flávia Rogeria |
+| 18 | I-031788192-23 | Moreno Da Silva Luma |
+| 19 | I-843614762-68 | Oliveira De Lima Cristiane |
+| 20 | I-143523461-87 | Pereira Da Costa Silva Tercia Maria |
+| 21 | I-005267472-00 | Pinheiro Da Silva Beatriz |
+| 22 | I-060052022-60 | Schneberger De Souza Clara Aline |
+| 23 | I-040578842-89 | Silva De Amorim Jessiane |
+| 24 | I-003454272-89 | Silva De Carvalho Fernando |
+| 25 | I-020917112-09 | Silva Do Nascimento Abne Aymon |
+| 26 | 5708393 | Subtil Bello Larisa |
+| 27 | I-008082272-03 | Tavares De Sousa Aldercleiton |
+| 28 | I-040830952-02 | Vasconcelos Teixeira Victor |
+| 29 | I-077771202-47 | Viana Carneiro Ana Sarah |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA N1 | AULA: 9**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | 1766471 | Aguilar Tellez Cassia Nikole |
+| 2 | 1766491 | Aguilar Tellez Marcelo Federico |
+| 3 | I-704982982-83 | Alves De Oliveira Hugo |
+| 4 | I-698947362-20 | Alves Jansen Uesiles |
+| 5 | I-887416052-68 | Alves Vasconcelos Hailton Wagner |
+| 6 | I-704929752-64 | Alves Xavier Sthefany |
+| 7 | I-034857972-19 | Ardaia Berimba Pietro |
+| 8 | I-040052892-40 | Benjamin De Lima Glaucilânia |
+| 9 | I-052129502-52 | Bento Alencar Elane |
+| 10 | I-065100892-11 | Bento Alencar Steffany |
+| 11 | I-934531592-68 | Braña Matos Maria Aparecida |
+| 12 | I-071689542-02 | Camargo Moreira Hector Ghilherme |
+| 13 | I-697613702-59 | Cardoso Acióle Iglete |
+| 14 | I-046630652-01 | Carvalho De Souza Emerson |
+| 15 | I-080578202-84 | Castro Rodrigues Thiago |
+| 16 | I-022.433.332-10 | Corrêa De Freitas Maiko |
+| 17 | I-975614442-49 | Costas De Assis Josiclei |
+| 18 | I-012241522-12 | Da Rocha Basgal Francisco Das Chagas |
+| 19 | I-006668172-35 | Da Rocha Basgal Jeisse Kely |
+| 20 | I-009660692-42 | Da Silva Aguiar Rosicleia |
+| 21 | I-035347332-40 | Da Silva Macêdo Raycielle |
+| 22 | I-001008922-56 | Da Silva Sena Ítalo Marcel |
+| 23 | I-006784752-88 | De Oliveira Canaverde Fernanda Cristina |
+| 24 | I-024774362-36 | De Oliveira Ferreira Araújo Janaina |
+| 25 | I-05335959240 | Dias Vieira Graziely |
+| 26 | I-031376992-31 | Dos Santos Cruz Tainá |
+| 27 | I-028424962-99 | Farias Lopes Karen |
+| 28 | I-039702882-23 | Farias Rosas Maria Gabriely |
+| 29 | I-089971152-94 | Ferreira De Souza Jheimerson Ruan |
+| 30 | I-797333522-68 | Gomes De Sousa Jhonatan |
+| 31 | I-027370133-99 | Lobato Gonçalves Miranda Daniel |
+| 32 | I-618559952-04 | Melo Morais Danusa Nássara |
+| 33 | I-944455082-68 | Mendes Da Silva Cindy |
+| 34 | I-00735482276 | Mendes da Silva Damaris |
+| 35 | I-023667192-80 | Menezes Costa Paula Eduarda |
+| 36 | I-005427182-78 | Moraes Do Nascimento Marinês |
+| 37 | I-437229738-64 | Moreira De Souza Isaac |
+| 38 | I-014283952-37 | Nascimento De Araújo Dauro Lúcio |
+| 39 | I-088200482-48 | Nascimento Moraes João Manoel |
+| 40 | I-012712202-88 | Nascimento Souza Isabelle Mariane |
+| 41 | I-034497462-60 | Noronha Dos Santos Kaio Orlando |
+| 42 | I-02694265235 | Oliveira Clementino Nilvan |
+| 43 | I-877835179-00 | Peres Da Silva Ana Paula |
+| 44 | I-048738532-22 | Sales Pereira Weslen |
+| 45 | I-024362692-46 | Santos Pinheiro Nayelen Chrystine |
+| 46 | I-465809992-68 | Silva Moncada Vanúbia |
+| 47 | I-072283822-00 | Silva Morais Maria Eduarda |
+| 48 | I-549044982-91 | Souza dos Santos Thaylan |
+| 49 | I-860694542-00 | Torres De Lima Leandro |
+| 50 | I-048806392-22 | Vivan Lopes Vinícius |
+| 51 | I-838305022-49 | Lima Costa Salustiano Nielson |
+| 52 | I-893527002-44 | Vieira Da Silva Lima Evilando |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA N2 | AULA: 2**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-036323682-10 | Abreu Da Rocha Antonio Ericles |
+| 2 | I-016856162-08 | Alves Da Costa Clicia |
+| 3 | I-035560512-06 | Alves Rodrigues Thayra Lissa |
+| 4 | I-097856082-55 | Amorim Da Silva Wendel Elizeu |
+| 5 | I-042464232-89 | Ancelmo Teles Alencar Roniesley |
+| 6 | I-571151842-91 | Azevedo Da Silva Tessinari Neiva |
+| 7 | I-005058452-96 | Azevedo De Assis Alessandro |
+| 8 | I-221958648-00 | Cecilio Da Cunha Edmar Rodrigo |
+| 9 | I-034468172-63 | Chaves Dos Santos Sara |
+| 10 | I-041499532-52 | Cordeiro Barbosa Jônatas |
+| 11 | I-002960052-90 | Costa De Souza Maria Francisca |
+| 12 | I-058805882-38 | Cunha De Morais Kassia |
+| 13 | I-071130472-62 | Da Silva Antônio Eduardo |
+| 14 | I-956785062-34 | Da Silva Barbosa Jhonathan |
+| 15 | I-007753462-09 | Da Silva Lopes Edinaldo |
+| 16 | I-856630772-00 | De Paula Hermongenes Maria Raimunda |
+| 17 | I-524266292-15 | De Sousa Cabral Erivânia |
+| 18 | I-388993478-16 | De Souza Victor Henrique |
+| 19 | I-055119482-09 | De Souza Cardoso Paulo Henrique |
+| 20 | I-088627054-50 | De Souza Gadelha Yargo |
+| 21 | I-976288242-34 | Dos Santos De Oliveira Edivânia |
+| 22 | I-059082902-54 | Dos Santos Flores Mirelly |
+| 23 | I-887610612-04 | Evangelista Silva Luciana |
+| 24 | I-078755362-00 | Freire Gonçalves José Paulo |
+| 25 | I-000398502-42 | Lima De Moura Zabala Mayara |
+| 26 | I-053929622-89 | Lopes Silveira Ana Clara |
+| 27 | I-736566402-97 | Lourenço Da Silva Edson |
+| 28 | I-033117602-55 | Luna Castelo Branco Ana Paula |
+| 29 | I-079555582-27 | Macedo De Araújo Elson Júnior |
+| 30 | I-045541972-80 | Marçal De Oliveira Diego |
+| 31 | 1768952 | Menacho Justiniano Karla Daniela |
+| 32 | I-024511252-92 | Mesquita De Sousa Brayan |
+| 33 | I-699897102-87 | Nascimento Da Silva Vanilson |
+| 34 | I-084933182-05 | Nascimento De Souza Francisco Rogério |
+| 35 | I-024432722-06 | Nascimento Pinheiro Kawany |
+| 36 | I-894516002-72 | Nogueira De Oliveira Maria Cristina |
+| 37 | I-027364932-90 | Nunes Da Silva Jardson |
+| 38 | I-964872672-87 | Oliveira Da Silva Josicarla |
+| 39 | I-021063662-99 | Pereira Maciel Victor Borman |
+| 40 | I-037237522-76 | Rocha Júnior Laercio |
+| 41 | I-039605182-00 | Rodrigues Feitosa Franciele |
+| 42 | I-702795492-37 | Romualdo Ferreira Helidieni |
+| 43 | I-055662972-85 | Santos Pavão Ana Luiza |
+| 44 | I-700415892-62 | Silva De Souza Edivan |
+| 45 | I-908302882-87 | Silva Do Nascimento Edivan |
+| 46 | 5715957 | Tanwing Severino Tamara Rossana |
+| 47 | I-028349162-09 | Torres Dos Santos Junior Goncalo |
+| 48 | I-677719712-53 | Uchôa Barroso Maria Lúcia |
+| 49 | I-941017602-68 | Zabala Da Cunha Alison |
+| 50 | I-12756326 | Lopes Dos Santos Geovane |
+| 51 | I-060708442-11 | Sobreira Bezerra Vittório |
+| 52 | I-033483102-45 | Batista de Oliveira Gabriel |
+| 53 | I-015461862-47 | Dantas Pereira Fabrícia Evelim |
+| 54 | I-070272312-63 | Santos da Silva Amanda |
+
+---
+
+**1ER SEMESTRE | UPDS | TURMA N3 | AULA: 3**
+
+| N° | IDENTIDAD | NOMBRE COMPLETO |
+|----|-----------|-----------------|
+| 1 | I-057586122-35 | Alemão Azevedo Walace Felipe |
+| 2 | I-003797582-02 | Alencar Gois Queiliane |
+| 3 | I-032172512-37 | Araújo De Lima Joseane |
+| 4 | I-630770861-15 | Batista Costa Osvaldo |
+| 5 | 128263 | Batista Coutinho Maria Do Socorro |
+| 6 | I-987269272-68 | Batista Dos Santos Rainilson |
+| 7 | 17996530 | Braga Caldera Hebert Kleiner |
+| 8 | I-089844782-88 | Calixto Maia Matheus |
+| 9 | I-005341982-01 | Coimbra De Souza Felipe |
+| 10 | I-067635942-67 | Costa Dos Santos Thaynara |
+| 11 | I-059225022-98 | Da Silva Brandão Luiz |
+| 12 | I-042532572-59 | Da Silva E Silva Ana Glécia |
+| 13 | I-80898062-95 | Da Silva Lopes Ana Vitória |
+| 14 | I-102939662-06 | Da Silva Lopes Paulo Enrique |
+| 15 | I-016990362-17 | Da Silva Oliveira Ana Gabriela |
+| 16 | I-040016014-51 | Da Silva Santos Kátia |
+| 17 | I-012837482-90 | Da Silva Teles Adriano |
+| 18 | I-016349492-42 | de Aguiar Teixeira Camila |
+| 19 | I-039422462-01 | De Assis Freitas Vívian Lenna |
+| 20 | I-049856492-44 | De Lima Dos Santos Tamires |
+| 21 | I-040989812-03 | De Lima Pinheiro Jair |
+| 22 | I-849540602-06 | De Oliveira Pereira Jairo |
+| 23 | I-089463482-83 | De Queiroz Marques Maria Luizy |
+| 24 | I-062931532-94 | De Souza Anacleto Júlia |
+| 25 | I-918232182-53 | De Souza Batista Jessica |
+| 26 | I-058829112-90 | De Souza Neves Alice |
+| 27 | I-073187932-50 | De Souza Pereira Jerder Juciê |
+| 28 | I-024602062-83 | Farias Da Silva Everton |
+| 29 | 12756182 | Fernadez Suarez Zharick Kitana |
+| 30 | I-063502552-32 | Fontenele Lima Bruna |
+| 31 | 4213158 | Gutierrez Lobo Sebastian |
+| 32 | I-032395422-77 | Lisboa Tiago Jose Raimundo |
+| 33 | I-033515652-59 | Lopes De Araújo Thávine |
+| 34 | I-041196662-63 | Martins Da Silva Filho José Aluízio |
+| 35 | 4412821 | Mendoza Suarez Victor Hugo |
+| 36 | I-945977312-53 | Muniz De Assis Lucas |
+| 37 | I-037315402-07 | Nascimento Da Silva Alessandro |
+| 38 | 12564022 | Peralta Bismarck Jose Jaime |
+| 39 | I-011326842-42 | Pereira Da Silva Aurelio |
+| 40 | I-814482792-91 | Pereira De Araújo Danielle Regiane |
+| 41 | I-026678522-06 | Ribeiro Balan Wilson Matheus |
+| 42 | GG881799 | Rodomilson Dos Santos Luiz |
+| 43 | I-006336932-00 | Sales Pereira Rogério |
+| 44 | I-068342622-29 | Sampaio Fariñas Joao Carlos |
+| 45 | I-060791162-00 | Santos Do Nascimento Jennifer Eduarda |
+| 46 | I-061598832-67 | Souza Da Silva Rodrigo |
+| 47 | 13856396 | Suarez Fernandez Maria Angela |
+| 48 | I-759131602-82 | Tavares Da Silva Santos Francisca |
+| 49 | I-052406102-58 | Venialgo Gomes Daniella Carolina |
+| 50 | I-084699712-63 | Vieira Do Nascimento Walther |
+| 51 | I-00254830218 | Oliveira Barbosa Thalys Santiago |
+| 52 | I-027013562-61 | Gurgel De Almeida Elisa Cristina |
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
