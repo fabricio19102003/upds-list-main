@@ -245,7 +245,6 @@
 | 15 | I-618821013-59 | Fonteles Jereissati Lia |
 | 16 | I-699565702-06 | França Do Nascimento Cassiano |
 | 17 | I-000890972-54 | Gadelha Prado Fernando |
-| 18 | 13108452 | Isita Molina Arianne Sharid |
 | 19 | I-921820892-68 | Lopes Da Silva Jamiúli |
 | 20 | I-018772202-13 | Maia da Silva Thalita Raquel |
 | 21 | I-858781202-59 | Martins Lima Neto Almeron |
