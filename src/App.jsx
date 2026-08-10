@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
 import './App.css'
 
-const dataFiles = import.meta.glob('./data/*.txt', { query: '?raw', import: 'default', eager: true })
+// Parsing remains temporarily for the follow-up cleanup, but production data is server-only.
+const dataFiles = {}
 
 const getHorario = (semestre, turno) => {
   const s = parseInt(semestre);
@@ -110,47 +111,32 @@ const App = () => {
     }, 1200);
   }, [])
 
-  const filteredStudents = useMemo(() => {
-    if (!searchTerm.trim()) return []
-    
-    // Normalize string: lower case, remove accents, and strip non-alphanumeric chars (except space)
-    const normalize = (str) => {
-      return str
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // Remove accents
-        .replace(/[^a-z0-9\s]/g, "");    // Remove special chars (punctuation, apostrophes, etc)
-    };
+  const filteredStudents = useMemo(
+    () => students.filter((student) => activeFilter === 'ALL' || student.turno === activeFilter),
+    [students, activeFilter],
+  )
 
-    const searchKeywords = normalize(searchTerm).split(/\s+/).filter(word => word.length > 0);
-
-    return students.filter(student => {
-      // 1. Shift Quick Filter
-      if (activeFilter !== 'ALL' && student.turno !== activeFilter) {
-        return false;
-      }
-
-      // 2. Keyword Search Match
-      const searchableString = normalize(`
-        ${student.nombre} 
-        ${student.codigo} 
-        ${student.grupo} 
-        ${student.sala} 
-        ${student.observacion}
-      `);
-
-      // Verify that ALL typed keywords exist somewhere in the student's data
-      return searchKeywords.every(keyword => searchableString.includes(keyword));
-    });
-  }, [searchTerm, students, activeFilter])
+  const runSearch = async (query, filter) => {
+    if (!query.trim()) return
+    setIsSearching(true);
+    try {
+      const response = await fetch('/api/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, turno: filter }),
+      })
+      const payload = await response.json()
+      setStudents(response.ok ? payload.results : [])
+    } catch {
+      setStudents([])
+    } finally {
+      setSearchTerm(query);
+      setIsSearching(false);
+    }
+  }
 
   const handleSearch = () => {
-    if (searchQuery === searchTerm) return; // Inútil buscar lo mismo
-    setIsSearching(true);
-    setTimeout(() => {
-      setSearchTerm(searchQuery);
-      setIsSearching(false);
-    }, 600);
+    runSearch(searchQuery, activeFilter)
   }
 
   const handleClear = () => {
@@ -163,13 +149,10 @@ const App = () => {
     }, 400);
   }
 
-  const handleFilterChange = (filter) => {
+  const handleFilterChange = async (filter) => {
     if (filter === activeFilter) return;
-    setIsSearching(true);
-    setTimeout(() => {
-      setActiveFilter(filter);
-      setIsSearching(false);
-    }, 400);
+    setActiveFilter(filter);
+    if (searchTerm) await runSearch(searchTerm, filter)
   }
 
   const handleKeyDown = (e) => {
@@ -255,7 +238,7 @@ const App = () => {
                         <p className="text-xs sm:text-sm text-amber-800/90 font-medium leading-relaxed">
                           Se desejar buscar pelo seu documento de identidade, você deve usar o seguinte formato: a letra <strong className="font-bold text-amber-900 bg-amber-200/50 px-1.5 py-0.5 rounded-md">I-</strong> antes do número. <br className="hidden sm:block" />
                           <span className="inline-flex items-center gap-1.5 mt-2.5 font-mono text-[11px] sm:text-xs bg-white/80 px-2.5 py-1.5 rounded-md border border-amber-200/80 text-amber-900 shadow-sm">
-                            <span className="text-amber-500 font-sans font-semibold">Exemplo:</span> I-075628942-48
+                            <span className="text-amber-500 font-sans font-semibold">Exemplo:</span> I-XXXXXXXXX-XX
                           </span>
                         </p>
                       </div>
@@ -402,7 +385,7 @@ const App = () => {
                               Grupo {student.grupo}
                             </span>
                             <span className="text-slate-500 font-medium text-sm">
-                              {student.observacion}
+                              {student.semestre}
                             </span>
                           </div>
                           <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100/60 gap-2">
@@ -447,7 +430,7 @@ const App = () => {
                                 Sala {student.sala}
                               </span>
                             </td>
-                            <td className="px-6 py-5 lg:px-8 lg:py-6 text-slate-400 font-semibold tracking-wide text-right text-sm lg:text-base">{student.observacion}</td>
+                            <td className="px-6 py-5 lg:px-8 lg:py-6 text-slate-400 font-semibold tracking-wide text-right text-sm lg:text-base">{student.semestre}</td>
                           </tr>
                         ))}
                       </tbody>
