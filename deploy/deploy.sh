@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 umask 077
+[[ ${RELEASE_TAG-} =~ ^[0-9a-f]{40}$ ]] || { printf 'RELEASE_TAG must be a certified full Git SHA (40 lowercase hexadecimal characters).\n' >&2; exit 1; }
+export RELEASE_TAG
 readonly APP_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 readonly COMPOSE="$APP_DIR/docker-compose.production.yml"
 [[ "$APP_DIR" == /srv/apps/aulas-upds ]] || { printf 'Run from /srv/apps/aulas-upds.\n' >&2; exit 1; }
@@ -16,7 +18,6 @@ compose=(docker compose -f "$COMPOSE")
 old_container="$("${compose[@]}" ps -q app)"
 old_image=""
 [[ -z "$old_container" ]] || old_image="$(docker inspect --format '{{.Image}}' "$old_container")"
-export RELEASE_TAG="$(date -u +%Y%m%dT%H%M%S)"
 rolled_out=0
 rollback() {
   status=$?; trap - ERR INT TERM

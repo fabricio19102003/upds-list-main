@@ -8,7 +8,7 @@ The container serves only minimized search results. Nominal data stays in a read
 2. Transfer code without deleting host state:
    `rsync -az --exclude '.git/' --exclude '.env*' --exclude 'node_modules/' --exclude 'dist/' --exclude 'src/data/' --exclude 'data/' ./ USER@HOST:/srv/apps/aulas-upds/`
 3. Transfer the protected source files separately to `/srv/apps/aulas-upds/data/`; do not use `--delete`.
-4. On the VPS run `bash /srv/apps/aulas-upds/deploy/deploy.sh`.
+4. On the VPS run `RELEASE_TAG=<certified-full-sha> bash /srv/apps/aulas-upds/deploy/deploy.sh`. The 40-character lowercase SHA must match the exact GitHub commit approved by the certification process.
 5. Install and activate the HTTP bootstrap:
    `sudo install -m 0644 deploy/nginx/aulas-upds.bootstrap.conf /etc/nginx/sites-available/aulas-upds.conf`
    `sudo ln -sfn /etc/nginx/sites-available/aulas-upds.conf /etc/nginx/sites-enabled/aulas-upds.conf`
