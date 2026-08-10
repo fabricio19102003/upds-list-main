@@ -3,6 +3,13 @@ set -Eeuo pipefail
 umask 077
 [[ ${RELEASE_TAG-} =~ ^[0-9a-f]{40}$ ]] || { printf 'RELEASE_TAG must be a certified full Git SHA (40 lowercase hexadecimal characters).\n' >&2; exit 1; }
 export RELEASE_TAG
+command -v id >/dev/null || { printf 'Missing id.\n' >&2; exit 1; }
+RUNTIME_UID="$(id -u)"
+RUNTIME_GID="$(id -g)"
+[[ "$RUNTIME_UID" =~ ^[1-9][0-9]*$ ]] || { printf 'Deployment operator UID must be a nonzero number.\n' >&2; exit 1; }
+[[ "$RUNTIME_GID" =~ ^[1-9][0-9]*$ ]] || { printf 'Deployment operator GID must be a nonzero number.\n' >&2; exit 1; }
+readonly RUNTIME_UID RUNTIME_GID
+export RUNTIME_UID RUNTIME_GID
 readonly APP_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 readonly COMPOSE="$APP_DIR/docker-compose.production.yml"
 [[ "$APP_DIR" == /srv/apps/aulas-upds ]] || { printf 'Run from /srv/apps/aulas-upds.\n' >&2; exit 1; }

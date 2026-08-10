@@ -4,7 +4,7 @@ services:
     image: aulas-upds:${RELEASE_TAG:-local}
     build: .
     restart: unless-stopped
-    user: "10001:10001"
+    user: "${RUNTIME_UID:?RUNTIME_UID must be set by deploy/deploy.sh}:${RUNTIME_GID:?RUNTIME_GID must be set by deploy/deploy.sh}"
     ports:
       - "127.0.0.1:3020:3000"
     volumes:
