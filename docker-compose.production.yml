@@ -5,6 +5,14 @@ services:
     build: .
     restart: unless-stopped
     user: "${RUNTIME_UID:?RUNTIME_UID must be set by deploy/deploy.sh}:${RUNTIME_GID:?RUNTIME_GID must be set by deploy/deploy.sh}"
+    environment:
+      CUPOS_STUDENT_CLASSROOM_BASE_URL: "http://cupos-turmas-student-classrooms-v1:3000/api/integrations/student-classrooms/v1"
+      CUPOS_STUDENT_CLASSROOM_TOKEN_FILE: /run/secrets/cupos_student_lookup_token
+      STUDENT_LOOKUP_PERIOD: "2026-2"
+    secrets:
+      - source: cupos_student_lookup_token
+        target: cupos_student_lookup_token
+    networks: [default, cupos_backend]
     ports:
       - "127.0.0.1:3020:3000"
     volumes:
@@ -20,10 +28,17 @@ services:
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     healthcheck:
-      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      test: [CMD, /nodejs/bin/node, -e, "fetch('http://127.0.0.1:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
       interval: 15s
       timeout: 5s
       retries: 5
       start_period: 10s
     logging:
       options: { max-size: 10m, max-file: "3" }
+secrets:
+  cupos_student_lookup_token:
+    file: /srv/secrets/portal/cupos-student-lookup-token
+networks:
+  cupos_backend:
+    external: true
+    name: cupos-turmas_backend

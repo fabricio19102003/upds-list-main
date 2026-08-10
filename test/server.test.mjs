@@ -4,10 +4,10 @@ import { createServer as createHttpServer } from 'node:http'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { after, before, test } from 'node:test'
-import { createServer, search } from '../server.mjs'
+import { createServer } from '../server.mjs'
 
 const root = mkdtempSync(join(tmpdir(), 'aulas-'))
-const dataDir = join(root, 'data'), distDir = join(root, 'dist'), tokenFile = join(root, 'token')
+const distDir = join(root, 'dist'), tokenFile = join(root, 'token')
 const token = 'a'.repeat(64), dataVersion = 'b'.repeat(64)
 const assignment = { semester: 1, group: 'M1', shift: 'M', capacity: 40, classroom: { room: '9', building: 'Main', floor: '1', floorLabel: 'First floor' } }
 const nullableAssignment = { semester: 2, group: 'N2', shift: 'N', capacity: null, classroom: { room: null, building: null, floor: null, floorLabel: null } }
@@ -20,12 +20,9 @@ const upstreamRequests = []
 const redirectTargetRequests = []
 const json = (response, status, value) => { response.writeHead(status, { 'Content-Type': 'application/json' }); response.end(JSON.stringify(value)) }
 before(async () => {
-  mkdirSync(dataDir); mkdirSync(distDir)
+  mkdirSync(distDir)
   writeFileSync(join(distDir, 'index.html'), '<h1>Portal</h1>')
   writeFileSync(tokenFile, token)
-  writeFileSync(join(dataDir, 'students.txt'), `**1ER SEMESTRE | UPDS | TURMA M1 | AULA: 9**
-| 1 | I-000000000-00 | Synthetic Student One |
-| 2 | 00000000 | Synthetic Student Two |`)
   upstream = createHttpServer(async (request, response) => {
     let text = ''
     for await (const chunk of request) text += chunk
@@ -63,7 +60,7 @@ before(async () => {
   }).listen(0, '127.0.0.1')
   await new Promise((resolve) => upstream.once('listening', resolve))
   upstreamBase = `http://127.0.0.1:${upstream.address().port}/api/integrations/student-classrooms/v1`
-  server = createServer({ dataDir, distDir, studentLookup: { baseUrl: upstreamBase, tokenFile, period: '2026-2', timeoutMs: 100 } }).listen(0, '127.0.0.1')
+  server = createServer({ distDir, studentLookup: { baseUrl: upstreamBase, tokenFile, period: '2026-2', timeoutMs: 100 } }).listen(0, '127.0.0.1')
   await new Promise((resolve) => server.once('listening', resolve))
   base = `http://127.0.0.1:${server.address().port}`
 })
@@ -73,7 +70,6 @@ after(async () => {
   rmSync(root, { recursive: true })
 })
 
-const post = (body, headers = {}) => fetch(`${base}/api/search`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(body) })
 const lookupPost = (body, headers = {}, suffix = '') => fetch(`${base}/api/student-search${suffix}`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(body) })
 const expectPortalError = async (response, status) => {
   const text = await response.text(), value = JSON.parse(text)
@@ -84,36 +80,14 @@ const expectPortalError = async (response, status) => {
   return text
 }
 const withPortal = async (studentLookup, callback) => {
-  const instance = createServer({ dataDir, distDir, studentLookup }).listen(0, '127.0.0.1')
+  const instance = createServer({ distDir, studentLookup }).listen(0, '127.0.0.1')
   await new Promise((resolve) => instance.once('listening', resolve))
   try { await callback(`http://127.0.0.1:${instance.address().port}`) } finally { await new Promise((resolve) => instance.close(resolve)) }
 }
-test('searches by exact document without returning it', async () => {
-  const response = await post({ query: 'I-000000000-00', turno: 'ALL' })
-  const text = await response.text()
-  assert.equal(response.status, 200); assert.match(text, /Synthetic/); assert.doesNotMatch(text, /000000000/)
-})
-test('rejects unknown request properties', async () => {
-  assert.equal((await post({ query: 'Synthetic One', turno: 'M', extra: true })).status, 400)
-})
-test('rejects URL query parameters', async () => {
-  const response = await fetch(`${base}/api/search?extra=true`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: 'Synthetic One', turno: 'M' }) })
-  assert.equal(response.status, 400)
-})
-test('searches by name and rejects unsafe requests', async () => {
-  assert.equal((await post({ query: 'Synthetic One', turno: 'M' })).status, 200)
-  assert.equal((await post({ query: 'Ana', turno: 'ALL' })).status, 400)
-  assert.equal((await fetch(`${base}/api/search`)).status, 405)
-  assert.equal((await post({ query: 'Synthetic One', turno: 'M' }, { Origin: 'https://evil.example' })).status, 403)
-  assert.equal((await fetch(`${base}/api/export`)).status, 404)
-  assert.equal((await fetch(`${base}/api/search`, { method: 'POST', body: '{}' })).status, 415)
-  assert.throws(() => search(Array(11).fill({ nameKey: 'common student', turno: 'M' }), { query: 'common student', turno: 'ALL' }), { status: 422 })
-})
-
 test('returns validated safe metadata without exposing private configuration', async () => {
   const response = await fetch(`${base}/api/student-search/metadata`), value = await response.json()
   assert.equal(response.status, 200); assert.equal(response.headers.get('cache-control'), 'no-store')
-  assert.deepEqual(value, { activePeriod: { code: '2026-2', displayName: '2/2026' }, dataVersion, scheduleAvailable: false })
+  assert.deepEqual(value, { apiVersion: 'v1', activePeriod: { code: '2026-2', displayName: '2/2026' }, dataVersion, scheduleAvailable: false })
   const request = upstreamRequests.at(-1)
   assert.deepEqual({ method: request.method, authorized: request.authorized, accept: request.accept, cache: request.cache }, { method: 'GET', authorized: true, accept: 'application/json', cache: 'no-store' })
 })
@@ -133,6 +107,7 @@ test('proxies exact name and document searches and preserves every nullable assi
 })
 
 test('enforces exact public methods, queries, origins, content type, body size, and input keys', async () => {
+  assert.equal((await fetch(`${base}/api/search`, { method: 'POST' })).status, 404)
   await expectPortalError(await fetch(`${base}/api/student-search`), 405)
   await expectPortalError(await fetch(`${base}/api/student-search/metadata`, { method: 'POST' }), 405)
   await expectPortalError(await lookupPost({ mode: 'name', query: 'Synthetic' }, {}, '?extra=true'), 400)
@@ -176,7 +151,7 @@ test('rejects every upstream redirect without sending authorization or bodies to
   } finally { upstreamBehavior = 'valid' }
 })
 
-test('keeps missing and invalid new-route configuration isolated from legacy startup', async () => {
+test('keeps missing and invalid gateway configuration isolated from health', async () => {
   const requestCount = upstreamRequests.length
   for (const contents of ['f'.repeat(63), 'g'.repeat(64)]) {
     writeFileSync(tokenFile, contents)
@@ -186,11 +161,9 @@ test('keeps missing and invalid new-route configuration isolated from legacy sta
   await expectPortalError(await fetch(`${base}/api/student-search/metadata`), 503)
   assert.equal(upstreamRequests.length, requestCount)
   writeFileSync(tokenFile, token)
-  assert.equal((await post({ query: 'Synthetic One', turno: 'M' })).status, 200)
   await withPortal({ baseUrl: '', tokenFile: '', period: '' }, async (localBase) => {
     await expectPortalError(await fetch(`${localBase}/api/student-search/metadata`), 503)
-    const response = await fetch(`${localBase}/api/search`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: 'Synthetic One', turno: 'M' }) })
-    assert.equal(response.status, 200)
+    assert.equal((await fetch(`${localBase}/health`)).status, 200)
   })
   await withPortal({ baseUrl: upstreamBase, tokenFile, period: '2026-1' }, async (localBase) => {
     await expectPortalError(await fetch(`${localBase}/api/student-search/metadata`), 503)
