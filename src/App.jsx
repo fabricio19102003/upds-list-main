@@ -1,29 +1,5 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
-
-// Parsing remains temporarily for the follow-up cleanup, but production data is server-only.
-const dataFiles = {}
-
-const getHorario = (semestre, turno) => {
-  const s = parseInt(semestre);
-  if (turno === 'M') {
-    if (s <= 4) return 'Mañana (06:30 - 12:00)';
-    if (s === 5) return 'Mañana (06:30 - 13:00)';
-    if (s === 6) return 'Mañana (06:30 - 14:00)';
-    if (s === 7) return 'Mañana (06:30 - 13:40)';
-    return 'Mañana';
-  } else if (turno === 'T') {
-    if (s <= 4) return 'Tarde (12:00 - 17:30)';
-    return 'Tarde';
-  } else if (turno === 'N') {
-    if (s <= 4) return 'Noche (17:30 - 23:00)';
-    if (s === 5) return 'Noche (17:00 - 23:00)';
-    if (s === 6) return 'Noche (15:30 - 23:00)';
-    if (s === 7) return 'Noche (16:00 - 23:00)';
-    return 'Noche';
-  }
-  return '';
-};
 
 const getTurnoColor = (turno) => {
   if (turno === 'M') return 'bg-yellow-100/90 text-yellow-800 shadow-sm ring-1 ring-yellow-300/60';
@@ -50,116 +26,121 @@ const getGrupoColor = (grupo) => {
   return colors[Math.abs(hash) % colors.length] + ' shadow-sm ring-1';
 };
 
+const classroomLabel = (classroom) => {
+  if (!classroom) return 'Aula, edificio y piso no informados'
+  const floor = classroom.floorLabel || (classroom.floor ? `Piso ${classroom.floor}` : 'Piso no informado')
+  return [classroom.room ? `Aula ${classroom.room}` : 'Aula no informada', classroom.building ? `Edificio ${classroom.building}` : 'Edificio no informado', floor].join(' · ')
+}
+
+const capacityLabel = (capacity) => capacity === null || capacity === undefined ? 'Capacidad no informada' : `Capacidad ${capacity}`
+
 const App = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
-  const [students, setStudents] = useState([])
+  const [searchMode, setSearchMode] = useState('name')
+  const [searchState, setSearchState] = useState('idle')
+  const [portal, setPortal] = useState({ metadata: null, students: [] })
   const [isLoading, setIsLoading] = useState(true)
-  const [activeFilter, setActiveFilter] = useState('ALL') // 'ALL', 'M', 'T', 'N'
+  const [metadataUnavailable, setMetadataUnavailable] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
+  const requestId = useRef(0)
+  const searchController = useRef(null)
 
   useEffect(() => {
-    const allStudents = [];
-    
-    // Process each document
-    Object.values(dataFiles).forEach((rawText) => {
-      if (!rawText) return;
-      
-      const lines = rawText.split('\n');
-      let currentSemestre = '';
-      let currentTurma = '';
-      let currentAula = '';
-      let currentTurno = '';
-      
-      const headerRegex = /\*\*(\d+)[A-Z]+\s*SEMESTRE\s*\|\s*UPDS\s*\|\s*TURMA\s*([MTNA-Z\d\s]+?)(?:\s*\|\s*AULA:\s*(.+?))?\*\*/i;
-      const rowRegex = /\|\s*\d+\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|/;
-
-      for (const line of lines) {
-        const headerMatch = line.match(headerRegex);
-        if (headerMatch) {
-          currentSemestre = headerMatch[1].trim();
-          currentTurma = headerMatch[2].trim();
-          currentTurno = currentTurma.charAt(0).toUpperCase();
-          currentAula = headerMatch[3] ? headerMatch[3].trim() : 'Por asignar';
-          continue;
-        }
-
-        const rowMatch = line.match(rowRegex);
-        if (rowMatch && currentSemestre && currentTurma && currentAula) {
-          const identidad = rowMatch[1].trim();
-          const nombre = rowMatch[2].trim();
-          
-          if (identidad === 'IDENTIDAD') continue; // Skip table header
-          
-          allStudents.push({
-            codigo: identidad,
-            nombre: nombre,
-            grupo: currentTurma,
-            turno: currentTurno,
-            horario: getHorario(currentSemestre, currentTurno),
-            sala: currentAula,
-            observacion: `${currentSemestre}º Semestre`
-          });
-        }
+    const controller = new AbortController()
+    const loadMetadata = async () => {
+      try {
+        const response = await fetch('/api/student-search/metadata', { cache: 'no-store', signal: controller.signal })
+        if (!response.ok) throw new Error('unavailable')
+        const metadata = await response.json()
+        if (!metadata?.activePeriod?.code || typeof metadata.activePeriod.displayName !== 'string' || typeof metadata.dataVersion !== 'string' || metadata.scheduleAvailable !== false) throw new Error('invalid_metadata')
+        setPortal((current) => ({ ...current, metadata }))
+      } catch (error) {
+        if (error?.name !== 'AbortError') setMetadataUnavailable(true)
+      } finally {
+        if (!controller.signal.aborted) setIsLoading(false)
       }
-    });
-    
-    // Simulate a loading state for premium feel and future scalability
-    setTimeout(() => {
-      setStudents(allStudents);
-      setIsLoading(false);
-    }, 1200);
+    }
+    loadMetadata()
+    return () => { controller.abort(); searchController.current?.abort() }
   }, [])
 
-  const filteredStudents = useMemo(
-    () => students.filter((student) => activeFilter === 'ALL' || student.turno === activeFilter),
-    [students, activeFilter],
-  )
-
-  const runSearch = async (query, filter) => {
-    if (!query.trim()) return
-    setIsSearching(true);
-    try {
-      const response = await fetch('/api/search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query, turno: filter }),
-      })
-      const payload = await response.json()
-      setStudents(response.ok ? payload.results : [])
-    } catch {
-      setStudents([])
-    } finally {
-      setSearchTerm(query);
-      setIsSearching(false);
-    }
+  const cancelSearch = () => {
+    requestId.current += 1
+    searchController.current?.abort()
+    searchController.current = null
+    setIsSearching(false)
   }
 
-  const handleSearch = () => {
-    runSearch(searchQuery, activeFilter)
+  const runSearch = async () => {
+    const query = searchQuery.trim().replace(/\s+/g, ' ')
+    cancelSearch()
+    setSearchTerm(query)
+    setPortal((current) => ({ ...current, students: [] }))
+    const valid = query.length <= 100 && (searchMode === 'name'
+      ? query.normalize('NFD').replace(/\p{M}/gu, '').length >= 3
+      : /[\p{L}\p{N}]/u.test(query))
+    if (!valid) { setSearchState('validation'); return }
+    const id = requestId.current
+    const controller = new AbortController()
+    searchController.current = controller
+    setSearchState('searching')
+    setIsSearching(true)
+    try {
+      const response = await fetch('/api/student-search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: searchMode, query }),
+        cache: 'no-store',
+        signal: controller.signal,
+      })
+      if (id !== requestId.current) return
+      if (!response.ok) {
+        setSearchState([400, 413, 415].includes(response.status) ? 'validation' : 'unavailable')
+        return
+      }
+      const payload = await response.json()
+      if (id !== requestId.current || typeof payload?.activePeriod !== 'string' || !Array.isArray(payload.results) || typeof payload.dataVersion !== 'string' || payload.scheduleAvailable !== false) return setSearchState('unavailable')
+      setPortal((current) => ({
+        metadata: {
+          activePeriod: { code: payload.activePeriod, displayName: current.metadata?.activePeriod?.code === payload.activePeriod ? current.metadata.activePeriod.displayName : payload.activePeriod },
+          dataVersion: payload.dataVersion,
+          scheduleAvailable: false,
+        },
+        students: payload.results,
+      }))
+      setMetadataUnavailable(false)
+      setSearchState(payload.results.length ? 'success' : 'empty')
+    } catch (error) {
+      if (error?.name !== 'AbortError' && id === requestId.current) setSearchState('unavailable')
+    } finally {
+      if (id === requestId.current) { setIsSearching(false); searchController.current = null }
+    }
   }
 
   const handleClear = () => {
-    setIsSearching(true);
-    setTimeout(() => {
-      setSearchQuery('');
-      setSearchTerm('');
-      setActiveFilter('ALL');
-      setIsSearching(false);
-    }, 400);
+    cancelSearch()
+    setSearchQuery('')
+    setSearchTerm('')
+    setSearchState('idle')
+    setPortal((current) => ({ ...current, students: [] }))
   }
 
-  const handleFilterChange = async (filter) => {
-    if (filter === activeFilter) return;
-    setActiveFilter(filter);
-    if (searchTerm) await runSearch(searchTerm, filter)
+  const handleModeChange = (mode) => {
+    cancelSearch()
+    setSearchMode(mode)
+    setSearchTerm('')
+    setSearchState('idle')
+    setPortal((current) => ({ ...current, students: [] }))
   }
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch()
-    }
+    if (e.key === 'Enter') runSearch()
   }
+
+  const rows = portal.students.flatMap((student) => student.assignments.length
+    ? student.assignments.map((assignment) => ({ student, assignment }))
+    : [{ student, assignment: null }])
 
   return (
     <div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-slate-50 via-white to-sky-50 font-sans selection:bg-sky-200 selection:text-blue-900">
@@ -198,8 +179,8 @@ const App = () => {
                 <span className="text-white font-black italic tracking-tighter text-xs">UPDS</span>
               </div>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-blue-900 mb-2 drop-shadow-sm">Sincronizando Sistema</h2>
-            <p className="text-slate-500 font-medium text-lg max-w-sm text-center">Cargando la base de datos de estudiantes y horarios...</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-blue-900 mb-2 drop-shadow-sm">Conectando con el portal</h2>
+            <p className="text-slate-500 font-medium text-lg max-w-sm text-center">Confirmando el periodo académico disponible...</p>
           </div>
         ) : (
           <div className="w-full max-w-7xl mx-auto relative z-10 animate-fade-in-up">
@@ -211,6 +192,16 @@ const App = () => {
                 </span>
                 Portal de Búsqueda Estudiantil
               </div>
+
+              {portal.metadata ? (
+                <div className="mx-auto flex max-w-2xl flex-wrap items-center justify-center gap-2 text-sm font-semibold" role="status">
+                  <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-emerald-800 ring-1 ring-emerald-200">Periodo {portal.metadata.activePeriod.displayName}{portal.metadata.activePeriod.displayName !== portal.metadata.activePeriod.code && ` (${portal.metadata.activePeriod.code})`}</span>
+                  <span className="rounded-full bg-slate-100 px-3 py-1.5 text-slate-700" title={`Versión de datos ${portal.metadata.dataVersion}`}>Datos {portal.metadata.dataVersion.slice(0, 8)}</span>
+                  <span className="w-full text-amber-800">Los horarios aún no están disponibles. Consulta aquí tu grupo y aula asignados.</span>
+                </div>
+              ) : metadataUnavailable ? (
+                <p className="mx-auto max-w-xl rounded-xl bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900 ring-1 ring-amber-200" role="status">No pudimos confirmar el periodo en este momento. Aún puedes intentar una búsqueda.</p>
+              ) : null}
               
               <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-slate-900 drop-shadow-sm leading-[1.1]">
                 Encuentra tu <br className="sm:hidden" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-blue-700 to-sky-400">Sala</span>
@@ -219,11 +210,11 @@ const App = () => {
               {!searchTerm && (
                 <div className="space-y-6 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
                   <p className="text-lg sm:text-2xl text-slate-600 max-w-3xl mx-auto font-medium tracking-tight leading-relaxed px-4">
-                    Ingresa tu nombre completo o documento de identidad para consultar tu <strong className="text-blue-900">horario y aula</strong> asignada.
+                    Ingresa tu nombre completo o documento de identidad para consultar tu <strong className="text-blue-900">grupo y aula</strong> asignados.
                   </p>
                   
                   {/* Information Card for Brazilian Students */}
-                  <div className="inline-block bg-gradient-to-br from-amber-50/90 to-yellow-50/50 backdrop-blur-md border border-amber-200/60 rounded-2xl p-4 sm:p-5 shadow-sm max-w-xl mx-auto text-left relative overflow-hidden group mx-4 sm:mx-0">
+                  {searchMode === 'document' && <div className="inline-block bg-gradient-to-br from-amber-50/90 to-yellow-50/50 backdrop-blur-md border border-amber-200/60 rounded-2xl p-4 sm:p-5 shadow-sm max-w-xl mx-auto text-left relative overflow-hidden group mx-4 sm:mx-0">
                     <div className="absolute top-0 left-0 w-1.5 h-full bg-amber-400"></div>
                     <div className="flex items-start gap-3 sm:gap-4">
                       <div className="mt-1 flex-shrink-0 bg-white p-1.5 rounded-full shadow-sm text-amber-500 ring-1 ring-amber-100">
@@ -243,10 +234,20 @@ const App = () => {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </div>}
                 </div>
               )}
             </div>
+
+            <fieldset className="mx-auto mb-4 flex w-fit rounded-2xl bg-white/90 p-1.5 shadow-sm ring-1 ring-slate-200">
+              <legend className="sr-only">Tipo de búsqueda</legend>
+              {[['name', 'Nombre'], ['document', 'Documento']].map(([mode, label]) => (
+                <button key={mode} type="button" onClick={() => handleModeChange(mode)} aria-pressed={searchMode === mode}
+                  className={`rounded-xl px-5 py-2 text-sm font-bold transition ${searchMode === mode ? 'bg-blue-900 text-white shadow-md' : 'text-slate-600 hover:bg-blue-50 hover:text-blue-900'}`}>
+                  {label}
+                </button>
+              ))}
+            </fieldset>
 
             {/* Premium Search Bar */}
             <div className="group relative bg-white/80 backdrop-blur-2xl rounded-2xl sm:rounded-3xl p-2 sm:p-3 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-white/80 hover:shadow-[0_8px_30px_rgb(0,119,230,0.12)] focus-within:shadow-[0_8px_30px_rgb(0,119,230,0.15)] focus-within:ring-4 focus-within:ring-sky-500/20 transition-all duration-500 max-w-4xl mx-auto w-full">
@@ -262,7 +263,8 @@ const App = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Nombre o documento..."
+                    placeholder={searchMode === 'name' ? 'Nombre completo...' : 'Documento de identidad...'}
+                    aria-label={searchMode === 'name' ? 'Buscar por nombre' : 'Buscar por documento'}
                     className="w-full h-12 sm:h-16 pl-12 sm:pl-16 pr-12 sm:pr-14 bg-transparent border-0 focus:ring-0 text-slate-800 placeholder:text-slate-400 text-base sm:text-xl font-medium rounded-xl sm:rounded-2xl transition-all"
                   />
                   {searchQuery && (
@@ -278,7 +280,7 @@ const App = () => {
                 )}
               </div>
               <button
-                onClick={handleSearch}
+                onClick={runSearch}
                 disabled={isSearching}
                 className={`h-12 sm:h-16 w-full sm:w-40 bg-gradient-to-r from-blue-900 to-blue-800 hover:from-blue-800 hover:to-blue-700 text-white font-bold text-base sm:text-lg rounded-xl sm:rounded-2xl shadow-lg shadow-blue-900/30 hover:shadow-blue-900/40 active:scale-[0.97] transition-all flex items-center justify-center gap-2 ${isSearching ? 'opacity-75 cursor-not-allowed' : ''}`}
               >
@@ -286,41 +288,6 @@ const App = () => {
               </button>
             </div>
           </div>
-
-          {/* Quick Filters */}
-          {searchTerm && (
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 animate-fade-in-up transition-all duration-500">
-              <button 
-                onClick={() => handleFilterChange('ALL')} 
-                disabled={isSearching}
-                className={`px-5 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-bold transition-all shadow-sm flex items-center gap-2 ${activeFilter === 'ALL' ? 'bg-blue-600 text-white ring-2 ring-blue-300 ring-offset-2' : 'bg-white/90 text-slate-600 hover:bg-blue-50 hover:text-blue-600'} ${isSearching ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                Todos
-              </button>
-              <div className="h-6 w-px bg-slate-300"></div>
-              <button 
-                onClick={() => handleFilterChange('M')} 
-                disabled={isSearching}
-                className={`px-4 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-bold transition-all shadow-sm flex items-center gap-2 ${activeFilter === 'M' ? 'bg-yellow-500 text-white ring-2 ring-yellow-300 ring-offset-2' : 'bg-white/90 text-yellow-700 hover:bg-yellow-50'} ${isSearching ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"></span> Mañana
-              </button>
-              <button 
-                onClick={() => handleFilterChange('T')} 
-                disabled={isSearching}
-                className={`px-4 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-bold transition-all shadow-sm flex items-center gap-2 ${activeFilter === 'T' ? 'bg-orange-500 text-white ring-2 ring-orange-300 ring-offset-2' : 'bg-white/90 text-orange-700 hover:bg-orange-50'} ${isSearching ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <span className="w-2.5 h-2.5 rounded-full bg-orange-400"></span> Tarde
-              </button>
-              <button 
-                onClick={() => handleFilterChange('N')} 
-                disabled={isSearching}
-                className={`px-4 py-2 sm:py-2.5 rounded-full text-sm sm:text-base font-bold transition-all shadow-sm flex items-center gap-2 ${activeFilter === 'N' ? 'bg-blue-800 text-white ring-2 ring-blue-400 ring-offset-2' : 'bg-white/90 text-blue-800 hover:bg-blue-50'} ${isSearching ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Noche
-              </button>
-            </div>
-          )}
 
             <div className="mt-8 mb-16 w-full">
               {isSearching ? (
@@ -369,31 +336,32 @@ const App = () => {
                     </table>
                   </div>
                 </div>
-              ) : searchTerm && filteredStudents.length > 0 ? (
+              ) : searchState === 'success' && rows.length > 0 ? (
                 <div className="overflow-hidden bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
                   
                   {/* Mobile View (Cards) */}
                   <div className="md:hidden divide-y divide-slate-100">
-                    {filteredStudents.map((student, idx) => (
+                    {rows.map(({ student, assignment }, idx) => (
                       <div key={idx} className="p-4 sm:p-5 hover:bg-sky-50/50 transition-colors animate-fade-in-up" style={{ animationDelay: `${idx * 0.05}s` }}>
                         <div className="flex flex-col gap-2">
                           <div className="font-bold text-slate-800 text-lg leading-tight">
-                            {student.nombre}
+                            {student.name || 'Nombre no registrado'}
+                            <span className="mt-1 block font-mono text-xs font-medium text-slate-400">{student.documentHint}</span>
                           </div>
                           <div className="flex flex-wrap gap-2 items-center mt-1">
-                            <span className={`px-2.5 py-1 ${getGrupoColor(student.grupo)} rounded-md text-xs font-bold uppercase tracking-wide`}>
-                              Grupo {student.grupo}
+                            <span className={`px-2.5 py-1 ${getGrupoColor(assignment?.group || 'Sin grupo')} rounded-md text-xs font-bold uppercase tracking-wide`}>
+                              Grupo {assignment?.group || 'no informado'}
                             </span>
                             <span className="text-slate-500 font-medium text-sm">
-                              {student.semestre}
+                              {assignment ? `${assignment.semester}º Semestre` : 'Semestre no informado'}
                             </span>
                           </div>
                           <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100/60 gap-2">
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${getTurnoColor(student.turno)} truncate`}>
-                              {student.horario}
+                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${getTurnoColor(assignment?.shift)} truncate`}>
+                              Turno {assignment?.shift || 'no informado'}
                             </span>
                             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-sky-100/80 text-blue-800 ring-1 ring-sky-200/50 shadow-sm whitespace-nowrap">
-                              Sala {student.sala}
+                              {classroomLabel(assignment?.classroom)} · {capacityLabel(assignment?.capacity)}
                             </span>
                           </div>
                         </div>
@@ -408,44 +376,44 @@ const App = () => {
                         <tr className="bg-slate-50/50 border-b border-slate-100 text-slate-500 text-xs font-bold uppercase tracking-widest">
                           <th className="px-6 py-4 lg:px-8 lg:py-5">Nombre Completo</th>
                           <th className="px-6 py-4 lg:px-8 lg:py-5">Grupo</th>
-                          <th className="px-6 py-4 lg:px-8 lg:py-5">Horario</th>
-                          <th className="px-6 py-4 lg:px-8 lg:py-5">Sala</th>
-                          <th className="px-6 py-4 lg:px-8 lg:py-5 text-right w-40">Semestre</th>
+                          <th className="px-6 py-4 lg:px-8 lg:py-5">Turno</th>
+                          <th className="px-6 py-4 lg:px-8 lg:py-5">Aula</th>
+                          <th className="px-6 py-4 lg:px-8 lg:py-5 text-right w-40">Semestre / capacidad</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {filteredStudents.map((student, idx) => (
+                        {rows.map(({ student, assignment }, idx) => (
                           <tr key={idx} className="hover:bg-sky-50/50 transition-colors group animate-fade-in-up" style={{ animationDelay: `${idx * 0.05}s` }}>
-                            <td className="px-6 py-5 lg:px-8 lg:py-6 text-slate-800 font-semibold text-base lg:text-lg">{student.nombre}</td>
+                            <td className="px-6 py-5 lg:px-8 lg:py-6 text-slate-800 font-semibold text-base lg:text-lg">{student.name || 'Nombre no registrado'}<span className="mt-1 block font-mono text-xs font-medium text-slate-400">{student.documentHint}</span></td>
                             <td className="px-6 py-5 lg:px-8 lg:py-6 text-slate-600 font-medium">
-                              <span className={`px-3 py-1.5 rounded-lg text-sm font-bold tracking-wide ${getGrupoColor(student.grupo)}`}>{student.grupo}</span>
+                              <span className={`px-3 py-1.5 rounded-lg text-sm font-bold tracking-wide ${getGrupoColor(assignment?.group || 'Sin grupo')}`}>{assignment?.group || 'No informado'}</span>
                             </td>
                             <td className="px-6 py-5 lg:px-8 lg:py-6 font-medium">
-                              <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs lg:text-sm font-bold ${getTurnoColor(student.turno)}`}>
-                                {student.horario}
+                              <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs lg:text-sm font-bold ${getTurnoColor(assignment?.shift)}`}>
+                                {assignment?.shift || 'No informado'}
                               </span>
                             </td>
                             <td className="px-6 py-5 lg:px-8 lg:py-6">
                               <span className="inline-flex items-center px-3 py-1.5 lg:px-4 lg:py-1.5 rounded-full text-xs lg:text-sm font-bold bg-sky-100/90 text-blue-800 shadow-sm ring-1 ring-sky-200">
-                                Sala {student.sala}
+                                {classroomLabel(assignment?.classroom)}
                               </span>
                             </td>
-                            <td className="px-6 py-5 lg:px-8 lg:py-6 text-slate-400 font-semibold tracking-wide text-right text-sm lg:text-base">{student.semestre}</td>
+                            <td className="px-6 py-5 lg:px-8 lg:py-6 text-slate-500 font-semibold tracking-wide text-right text-sm lg:text-base">{assignment ? `${assignment.semester}º Semestre` : 'No informado'}<span className="mt-1 block text-xs font-medium text-slate-400">{capacityLabel(assignment?.capacity)}</span></td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
                 </div>
-              ) : searchTerm && filteredStudents.length === 0 ? (
+              ) : ['empty', 'validation', 'unavailable'].includes(searchState) ? (
                 <div className="text-center py-16 sm:py-24 bg-white/50 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-dashed border-slate-300 shadow-sm max-w-3xl mx-auto px-4 animate-fade-in-up">
                   <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-slate-100 rounded-full flex items-center justify-center mb-4 sm:mb-6 shadow-inner">
                     <svg className="w-8 h-8 sm:w-10 sm:h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-slate-800">Ups, no encontramos a nadie</h3>
-                  <p className="text-slate-500 mt-2 text-base sm:text-lg">Revisa si escribiste bien el nombre o el documento de identidad.</p>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-800">{searchState === 'empty' ? 'No encontramos coincidencias' : searchState === 'validation' ? 'Revisa tu búsqueda' : 'La búsqueda no está disponible'}</h3>
+                  <p className="text-slate-500 mt-2 text-base sm:text-lg">{searchState === 'empty' ? 'Verifica el nombre o documento e inténtalo nuevamente.' : searchState === 'validation' ? (searchMode === 'name' ? 'Escribe al menos tres caracteres del nombre.' : 'Ingresa un documento válido.') : 'No pudimos completar la consulta. Inténtalo nuevamente en unos momentos.'}</p>
                 </div>
               ) : null}
             </div>
