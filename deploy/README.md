@@ -22,12 +22,13 @@ Do not rename or repurpose these variables:
 
 ## Deploy
 
-1. Transfer code without deleting host state: `rsync -az --exclude '.git/' --exclude '.env*' --exclude 'node_modules/' --exclude 'dist/' --exclude 'src/data/' --exclude 'data/' ./ USER@HOST:/srv/apps/aulas-upds/`.
-2. Run `RELEASE_TAG=<certified-full-sha> bash /srv/apps/aulas-upds/deploy/deploy.sh`. The lowercase 40-character SHA must identify the exact reviewed commit.
-3. Install the existing rate-limit zone, then the HTTPS site: `sudo install -m 0644 deploy/nginx/aulas-upds-rate-limit.conf /etc/nginx/conf.d/aulas-upds-rate-limit.conf && sudo install -m 0644 deploy/nginx/aulas-upds.conf /etc/nginx/sites-available/aulas-upds.conf`.
-4. Validate before reload: `sudo nginx -t && sudo systemctl reload nginx`.
+From a clean checkout at the reviewed `origin/main`, run `bash deploy/release-production.sh` and type the full SHA when prompted. The local wrapper creates a detached clean worktree, runs package, image, Trivy, transfer, Nginx, rollout, and safe public/remote health gates; `deploy.sh` remains the only remote rollout authority.
 
-The deploy succeeds only after `/health` and safe portal metadata both pass. Metadata must report API v1, period `2026-2`, a 64-hex `dataVersion`, and unavailable schedules. Neither probe prints its response body.
+Use `bash deploy/release-production.sh --dry-run` to run local certification and `rsync --dry-run`. Rsync still opens SSH and starts remote rsync, but it performs no file mutation and the wrapper runs no deploy command. Defaults can be overridden with `RELEASE_HOST`, `RELEASE_USER`, `RELEASE_IDENTITY`, `RELEASE_REMOTE_DIR`, `RELEASE_BRANCH`, and `RELEASE_DOMAIN`.
+
+If the active Nginx hash differs, the wrapper stops before rollout and prints the exact human-run `sudo install`, `nginx -t`, and reload commands. Run those only after review, then rerun the wrapper; it never executes `sudo`.
+
+The deploy succeeds only after remote `/health` and metadata readiness, then public safe metadata and an intentionally invalid name request returning sanitized `400`. The invalid request is rejected before private lookup and contains no student data. Probe bodies are validated without printing them.
 
 ## Token rotation
 
