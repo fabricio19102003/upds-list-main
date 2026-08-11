@@ -31,20 +31,26 @@ executable('docker', `
 printf '%s|%s|%s\\n' "$RUNTIME_UID" "$RUNTIME_GID" "$*" >> "$CALLS_FILE"
 case " $* " in
   *" network inspect "*) exit "$NETWORK_STATUS";;
-  *" ps -q app "*) [ -z "$OLD_CONTAINER" ] || printf '%s\\n' "$OLD_CONTAINER";;
-  *" inspect --format "*) printf '%s\\n' "$OLD_IMAGE";;
+  *" ps -q app "*) if /usr/bin/grep -q force-recreate "$CALLS_FILE"; then printf '%s\\n' "$CANDIDATE_CONTAINER"; exit "$CANDIDATE_PS_STATUS"; elif [ -n "$OLD_CONTAINER" ]; then printf '%s\\n' "$OLD_CONTAINER"; fi;;
+  *" inspect --format "*) case "$*" in
+    *".State.Health.Status"*) printf '%s\\n' "$DOCKER_HEALTH";;
+    *".RestartCount"*) printf '%s\\n' "$RESTART_COUNT";;
+    *".State.Health.Log"*) printf '%s\\n' "$HEALTH_EXIT_CODES";;
+    *".Image"*) if [ -n "$CANDIDATE_CONTAINER" ]; then case "$*" in *"$CANDIDATE_CONTAINER"*) printf '%s\\n' "$CANDIDATE_IMAGE"; exit "$CANDIDATE_IMAGE_STATUS";; esac; fi; printf '%s\\n' "$OLD_IMAGE";;
+  esac;;
+  *" logs --tail 200 "*) printf '%s' "$STARTUP_LOGS"; exit "$LOGS_STATUS";;
 esac
 exit 0`)
 executable('curl', `
 printf 'curl|%s\\n' "$*" >> "$CALLS_FILE"
-case "$*" in *student-search/metadata*) printf '%s\\n%s' "$METADATA_BODY" "$METADATA_HTTP_STATUS"; exit "$METADATA_CURL_STATUS";; *) exit "$HEALTH_STATUS";; esac`)
+case "$*" in *student-search/metadata*) printf '%s\\n%s' "$METADATA_BODY" "$METADATA_HTTP_STATUS"; exit "$METADATA_CURL_STATUS";; *) printf '%s' "$HEALTH_HTTP_STATUS"; exit "$HEALTH_CURL_STATUS";; esac`)
 executable('flock', 'exit 0')
 executable('sleep', 'exit 0')
 executable('stat', `case "$2" in %u) printf '%s\\n' "$SECRET_UID";; %a) printf '%s\\n' "$SECRET_MODE";; esac`)
 
 after(() => rmSync(root, { recursive: true }))
 
-const deploy = ({ uid = '1001', gid = '1001', networkStatus = '0', secret = 'valid', secretUid = uid, secretMode = '600', healthStatus = '0', metadataBody = validMetadata, metadataHttpStatus = '200', oldContainer = '', oldImage = '' } = {}) => {
+const deploy = ({ uid = '1001', gid = '1001', networkStatus = '0', secret = 'valid', secretUid = uid, secretMode = '600', healthCurlStatus = '0', healthHttpStatus = '200', metadataCurlStatus = '0', metadataBody = validMetadata, metadataHttpStatus = '200', oldContainer = '', oldImage = '', candidatePsStatus = '0', candidateContainer = '1234567890abcdef', candidateImageStatus = '0', candidateImage = `sha256:${'1'.repeat(64)}`, dockerHealth = 'unhealthy', restartCount = '3', healthExitCodes = '1,137,', logsStatus = '0', startupLogs = '' } = {}) => {
   rmSync(callsFile, { force: true })
   rmSync(secretFile, { force: true })
   if (secret === 'symlink') symlinkSync(join(appDir, 'docker-compose.production.yml'), secretFile)
@@ -60,18 +66,36 @@ const deploy = ({ uid = '1001', gid = '1001', networkStatus = '0', secret = 'val
       NETWORK_STATUS: networkStatus,
       SECRET_UID: secretUid,
       SECRET_MODE: secretMode,
-      HEALTH_STATUS: healthStatus,
-      METADATA_CURL_STATUS: '0',
+      HEALTH_CURL_STATUS: healthCurlStatus,
+      HEALTH_HTTP_STATUS: healthHttpStatus,
+      METADATA_CURL_STATUS: metadataCurlStatus,
       METADATA_HTTP_STATUS: metadataHttpStatus,
-      METADATA_BODY: JSON.stringify(metadataBody),
+      METADATA_BODY: typeof metadataBody === 'string' ? metadataBody : JSON.stringify(metadataBody),
       OLD_CONTAINER: oldContainer,
       OLD_IMAGE: oldImage,
+      CANDIDATE_PS_STATUS: candidatePsStatus,
+      CANDIDATE_CONTAINER: candidateContainer,
+      CANDIDATE_IMAGE_STATUS: candidateImageStatus,
+      CANDIDATE_IMAGE: candidateImage,
+      DOCKER_HEALTH: dockerHealth,
+      RESTART_COUNT: restartCount,
+      HEALTH_EXIT_CODES: healthExitCodes,
+      LOGS_STATUS: logsStatus,
+      STARTUP_LOGS: startupLogs,
       CALLS_FILE: callsFile,
     },
   })
 }
 
 const calls = () => readFileSync(callsFile, 'utf8').trim().split('\n')
+const assertExactRollback = (result) => {
+  assert.notEqual(result.status, 0)
+  assert.doesNotMatch(result.stdout, /healthy and ready/)
+  const tag = calls().findIndex((line) => line.includes('image tag old-image aulas-upds:'))
+  assert.ok(tag >= 0, `${result.stderr}\n${calls().join('\n')}`)
+  assert.equal(calls().filter((line) => line.endsWith('up -d --no-build app')).length, 1)
+  assert.ok(tag < calls().findIndex((line, index) => index > tag && line.endsWith('up -d --no-build app')))
+}
 
 test('exports the deployment operator IDs before Compose config, build, and up', () => {
   const result = deploy()
@@ -82,7 +106,7 @@ test('exports the deployment operator IDs before Compose config, build, and up',
   }
   assert.ok(calls().some((line) => line.includes('network inspect cupos-turmas_backend')))
   assert.ok(calls().some((line) => line.includes('/api/student-search/metadata')))
-  assert.ok(calls().some((line) => line.includes("--write-out \\n%{http_code}")))
+  assert.ok(calls().some((line) => line.includes('%{http_code}')))
   assert.ok(calls().findIndex((line) => line.includes('network inspect')) < calls().findIndex((line) => line.includes('config -q')))
   assert.ok(calls().findIndex((line) => line.includes('/health')) < calls().findIndex((line) => line.includes('/api/student-search/metadata')))
   assert.doesNotMatch(`${result.stdout}${result.stderr}${calls().join('\n')}`, new RegExp(token))
@@ -110,19 +134,75 @@ test('rejects missing infrastructure and unsafe secrets before build', () => {
   }
 })
 
-test('real metadata parser rejects schema drift and restores the TXT-compatible image', () => {
-  const invalidMetadata = [
-    { metadataBody: { ...validMetadata, activePeriod: { code: '2026-2' } } },
-    { metadataBody: { ...validMetadata, extra: 'synthetic' } },
-    { metadataBody: { ...validMetadata, activePeriod: { ...validMetadata.activePeriod, extra: 'synthetic' } } },
-    { metadataHttpStatus: '201' },
+test('categorizes every readiness failure with the real metadata parser', () => {
+  const failures = [
+    [{ healthCurlStatus: '7' }, 'health-transport'],
+    [{ healthHttpStatus: '503' }, 'health-http'],
+    [{ metadataCurlStatus: '28' }, 'metadata-transport'],
+    [{ metadataHttpStatus: '503' }, 'metadata-http'],
+    [{ metadataBody: '{invalid' }, 'metadata-invalid-json'],
+    [{ metadataBody: { ...validMetadata, extra: 'synthetic' } }, 'metadata-schema'],
+    [{ metadataBody: { ...validMetadata, activePeriod: { code: '2026-3', displayName: '3/2026' } } }, 'metadata-period'],
   ]
-  for (const metadata of invalidMetadata) {
-    const result = deploy({ ...metadata, oldContainer: 'old-container', oldImage: 'old-image' })
+  for (const [options, category] of failures) {
+    const result = deploy({ ...options, oldContainer: 'old-container', oldImage: 'old-image' })
     assert.notEqual(result.status, 0)
-    assert.match(result.stderr, /Readiness deadline exceeded/)
+    assert.match(result.stderr, new RegExp(`attempts=30 last=${category}`))
     assert.ok(calls().some((line) => line.includes('image tag old-image aulas-upds:')))
     assert.ok(calls().some((line) => line.endsWith('up -d --no-build app')))
     assert.doesNotMatch(`${result.stdout}${result.stderr}`, new RegExp(token))
   }
+})
+
+test('fails closed when candidate discovery is unsuccessful or ambiguous', () => {
+  const otherContainer = 'fedcba0987654321'
+  const failures = [
+    [{ candidatePsStatus: '1' }, 'candidate-ps'],
+    [{ candidateContainer: '' }, 'candidate-container'],
+    [{ candidateContainer: `1234567890abcdef\n${otherContainer}` }, 'candidate-container'],
+    [{ candidateContainer: 'not-a-container' }, 'candidate-container'],
+    [{ candidateImageStatus: '1' }, 'candidate-image-inspect'],
+    [{ candidateImage: 'sha256:not-an-image' }, 'candidate-image'],
+  ]
+  for (const [options, category] of failures) {
+    const result = deploy({ ...options, oldContainer: 'old-container', oldImage: 'old-image' })
+    assertExactRollback(result)
+    assert.match(result.stderr, new RegExp(`attempts=0 last=${category}`))
+    assert.ok(!calls().some((line) => line.startsWith('curl|')))
+    assert.doesNotMatch(result.stderr, /not-a-container|fedcba0987654321|not-an-image/)
+  }
+})
+
+test('reports failed startup-log capture as unavailable', () => {
+  const result = deploy({ healthHttpStatus: '503', logsStatus: '1', startupLogs: 'sensitive raw output', oldContainer: 'old-container', oldImage: 'old-image' })
+  assertExactRollback(result)
+  assert.match(result.stderr, /logs=unavailable startup_lines=unavailable startup_classes=unavailable/)
+  assert.doesNotMatch(result.stderr, /startup_lines=0|sensitive raw output/)
+})
+
+test('bounds malformed and oversized restart counters', () => {
+  for (const [restartCount, expected] of [['malformed-sensitive', 'invalid'], ['9'.repeat(50_000), 'capped']]) {
+    const result = deploy({ healthHttpStatus: '503', restartCount, oldContainer: 'old-container', oldImage: 'old-image' })
+    assertExactRollback(result)
+    assert.match(result.stderr, new RegExp(`restarts=${expected}`))
+    assert.ok(result.stderr.length < 1000)
+    assert.doesNotMatch(result.stderr, /malformed-sensitive|9{20}/)
+  }
+})
+
+test('prints bounded redacted candidate evidence before exact rollback', () => {
+  const pii = 'Student Jane Doe document 99887766 query results'
+  const leakedHash = 'e'.repeat(64)
+  const result = deploy({
+    metadataBody: `{invalid ${pii} token=${token} ${leakedHash}`, oldContainer: 'old-container', oldImage: 'old-image',
+    startupLogs: `EACCES permission denied /srv/private/${leakedHash}\nENOENT /data/${pii}\nlisten EADDRINUSE 0.0.0.0:3020\n${pii} token=${token} ${leakedHash}`,
+  })
+  assert.notEqual(result.status, 0)
+  const diagnostic = result.stderr.trim()
+  assert.match(diagnostic, /candidate=1234567890ab image=sha256:1{64} health=unhealthy restarts=3 health_exit_codes=1,137/)
+  assert.match(diagnostic, /logs=available startup_lines=4 startup_classes=permission-denied:1,missing-file:1,module-startup:0,port-binding:1,unclassified:1/)
+  for (const secret of [token, leakedHash, pii, '99887766', 'EACCES', 'ENOENT', '/srv/private']) assert.doesNotMatch(diagnostic, new RegExp(secret))
+  const tag = calls().findIndex((line) => line.includes('image tag old-image'))
+  assert.ok(calls().findIndex((line) => line.includes('logs --tail 200')) < tag)
+  assert.ok(tag < calls().findIndex((line, index) => index > tag && line.endsWith('up -d --no-build app')))
 })

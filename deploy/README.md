@@ -38,4 +38,6 @@ The private API accepts one token, so coordinate a short cutover: prepare the sa
 
 `deploy.sh` restores the previous image when health or metadata readiness fails. That image remains compatible because the TXT preflight and read-only mount are retained for this one release. For manual rollback, retag the previous image, run Compose with `--no-build`, verify `/health`, and restore the previous Nginx site so `/api/search` is rate-limited again.
 
+Before automatic rollback, a failed readiness deadline emits one bounded diagnostic with the failure category, validated candidate identity, Docker health counters, and classified startup-log counts. Candidate discovery is fail-closed; unavailable logs and invalid or capped restart counters are reported without raw values. Probe bodies and raw application logs are never emitted; `unclassified` means no safe infrastructure classification was possible.
+
 After the gateway release is stable and no TXT-image rollback is required, remove the Compose data mount, deploy TXT preflight, host runtime TXT directory, and tracked source TXT files in a separate reviewed cleanup.
