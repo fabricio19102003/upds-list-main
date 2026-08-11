@@ -22,7 +22,7 @@ Do not rename or repurpose these variables:
 
 ## Deploy
 
-From a clean checkout at the reviewed `origin/main`, run `bash deploy/release-production.sh` and type the full SHA when prompted. The local wrapper creates a detached clean worktree, runs package, image, Trivy, transfer, Nginx, rollout, and safe public/remote health gates; `deploy.sh` remains the only remote rollout authority.
+From a clean checkout at the reviewed `origin/main`, run `bash deploy/release-production.sh` and type the full SHA when prompted. The local wrapper creates a detached clean worktree with canonical tracked modes (`0644` files, `0755` executables and parent directories), revalidates those modes after all local gates, then runs transfer, Nginx, rollout, and safe public/remote health gates; `deploy.sh` remains the only remote rollout authority.
 
 Use `bash deploy/release-production.sh --dry-run` to run local certification and `rsync --dry-run`. Rsync still opens SSH and starts remote rsync, but it performs no file mutation and the wrapper runs no deploy command. Defaults can be overridden with `RELEASE_HOST`, `RELEASE_USER`, `RELEASE_IDENTITY`, `RELEASE_REMOTE_DIR`, `RELEASE_BRANCH`, and `RELEASE_DOMAIN`.
 

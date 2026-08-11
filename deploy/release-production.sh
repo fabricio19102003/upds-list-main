@@ -4,6 +4,40 @@ umask 077
 
 die() { printf 'Release stopped: %s\n' "$1" >&2; exit 1; }
 say() { printf '%s\n' "$1"; }
+validate_tracked_modes() {
+  local modes="$container/tracked-modes" container_real worktree_real entry metadata mode path expected actual relative current
+  [[ ! -L $container && -d $container ]] || die 'owned release container is not a real directory'
+  container_real=$(cd -- "$container" && pwd -P) || die 'cannot resolve owned release container'
+  [[ ! -L $worktree && -d $worktree ]] || die 'temporary worktree is not a real directory'
+  worktree_real=$(cd -- "$worktree" && pwd -P) || die 'cannot resolve temporary worktree'
+  [[ $worktree_real == "$container_real/worktree" ]] || die 'temporary worktree escaped its owned container'
+  actual=$(stat -c %a -- "$worktree") || die 'cannot inspect temporary worktree mode'
+  [[ $actual == 755 ]] || die 'temporary worktree mode is not canonical 0755'
+  git -C "$worktree" ls-files --stage -z >"$modes" || die 'cannot read tracked file modes'
+  while IFS= read -r -d '' entry; do
+    [[ $entry == *$'\t'* ]] || die 'malformed tracked file record'
+    metadata=${entry%%$'\t'*}
+    path=${entry#*$'\t'}
+    mode=${metadata%% *}
+    case $mode in 100644) expected=644;; 100755) expected=755;; *) die 'non-canonical tracked file mode';; esac
+    [[ -n $path && $path != /* && $path != . && $path != .. && $path != ../* && $path != */../* && $path != */.. && $path != ./* && $path != */./* && $path != */. ]] || die 'tracked path escaped temporary worktree'
+    relative=${path%/*}
+    if [[ $relative != "$path" ]]; then
+      current=''
+      while [[ -n $relative ]]; do
+        current=${current:+$current/}${relative%%/*}
+        [[ ! -L $worktree/$current && -d $worktree/$current ]] || die 'tracked parent is not a real directory'
+        actual=$(stat -c %a -- "$worktree/$current") || die 'cannot inspect tracked parent directory mode'
+        [[ $actual == 755 ]] || die 'tracked parent directory mode is not canonical 0755'
+        [[ $relative == */* ]] || break
+        relative=${relative#*/}
+      done
+    fi
+    [[ ! -L $worktree/$path && -f $worktree/$path ]] || die 'tracked path is not a regular file'
+    actual=$(stat -c %a -- "$worktree/$path") || die 'cannot inspect tracked file mode'
+    [[ $actual == "$expected" ]] || die "tracked file mode is not canonical 0$expected"
+  done <"$modes"
+}
 trap 'exit 129' HUP
 trap 'exit 130' INT
 trap 'exit 143' TERM
@@ -61,21 +95,13 @@ trap cleanup EXIT
 container=$(mktemp -d "$release_root/release.XXXXXX") || die 'cannot create owned release container'
 container_owned=1
 worktree="$container/worktree"
-git -C "$root" worktree add --quiet --detach "$worktree" "$sha" || die 'cannot create detached release worktree'
+(umask 022; git -C "$root" worktree add --quiet --detach "$worktree" "$sha") || die 'cannot create detached release worktree'
 worktree_registered=1
 [[ $worktree == "$container/worktree" && $(git -C "$worktree" rev-parse --is-inside-work-tree) == true ]] || die 'temporary worktree containment failed'
 [[ $(git -C "$worktree" symbolic-ref -q HEAD || true) == '' && $(git -C "$worktree" rev-parse HEAD) == "$sha" ]] || die 'temporary worktree is not detached at the release SHA'
 release_status=$(git -C "$worktree" status --porcelain=v1 --untracked-files=all) || die 'cannot inspect temporary worktree'
 [[ -z $release_status ]] || die 'temporary worktree is not clean'
-modes="$container/tracked-modes"
-git -C "$worktree" ls-files --stage -z >"$modes" || die 'cannot read tracked file modes'
-while IFS=$' \t' read -r -d '' mode _ _ path; do
-  case $mode in
-    100644) [[ ! -x $worktree/$path ]] || die 'non-executable tracked mode mismatch';;
-    100755) [[ -x $worktree/$path ]] || die 'executable tracked mode mismatch';;
-    *) die 'non-canonical tracked file mode';;
-  esac
-done <"$modes"
+validate_tracked_modes
 
 (cd -- "$worktree" && npm ci && npm test && npm run lint && npm run build && npm audit --audit-level=low)
 git -C "$worktree" diff --quiet && git -C "$worktree" diff --cached --quiet || die 'verification gates changed tracked files'
@@ -94,6 +120,7 @@ excludes=(.git/ .codegraph/ '.env*' node_modules/ dist/ src/data/ data/ test-res
 rsync_args=(-az --safe-links -e "$rsync_ssh")
 for pattern in "${excludes[@]}"; do rsync_args+=(--exclude "$pattern"); done
 (( dry_run == 0 )) || rsync_args+=(--dry-run)
+validate_tracked_modes
 rsync "${rsync_args[@]}" "$worktree/" "$user@$host:$remote/" >/dev/null || die 'rsync staging failed'
 if (( dry_run )); then
   say "DRY RUN certified $sha; rsync opened SSH/remote rsync but made no file or deploy mutation."

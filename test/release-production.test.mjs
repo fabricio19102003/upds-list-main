@@ -7,7 +7,7 @@ import { after, test } from 'node:test'
 
 const root = mkdtempSync(join(tmpdir(), 'release-wrapper-')), repo = join(root, 'repo'), bin = join(root, 'bin')
 const releaseRoot = join(root, '.aulas-upds-releases'), sentinel = join(releaseRoot, 'pre-existing'), callsFile = join(root, 'calls')
-const imageMark = join(root, 'image'), identity = join(root, 'identity'), sha = 'a'.repeat(40), secret = 'DO_NOT_PRINT_SYNTHETIC_SECRET'
+const imageMark = join(root, 'image'), worktreeMark = join(root, 'worktree-path'), identity = join(root, 'identity'), sha = 'a'.repeat(40), secret = 'DO_NOT_PRINT_SYNTHETIC_SECRET'
 mkdirSync(join(repo, 'deploy'), { recursive: true }); mkdirSync(bin); mkdirSync(releaseRoot, { mode: 0o700 }); chmodSync(releaseRoot, 0o700)
 writeFileSync(sentinel, 'owned elsewhere'); writeFileSync(identity, secret)
 const source = readFileSync(new URL('../deploy/release-production.sh', import.meta.url), 'utf8')
@@ -23,14 +23,16 @@ mock('git', `case "$*" in
   *'rev-parse --verify HEAD'*) printf '%s\\n' "$SHA";;
   *'rev-parse --verify refs/remotes/origin/main'*) [[ "$SCENARIO" == diverged ]] && printf '%040d\\n' 1 || printf '%s\\n' "$SHA";;
   *'ls-remote origin refs/heads/main'*) printf '%s\\trefs/heads/main\\n' "$SHA";;
-  *'worktree add'*) [[ "$SCENARIO" != worktree-add-fail ]] || exit 6; wt="\${@: -2:1}"; mkdir -p "$wt/deploy"; : > "$wt/docker-compose.production.yml";;
+  *'worktree add'*) [[ "$SCENARIO" != worktree-add-fail ]] || exit 6; wt="\${@: -2:1}"; printf '%s' "$wt" > "$WORKTREE_MARK"; mkdir -p "$wt/deploy"; : > "$wt/server.mjs"; : > "$wt/deploy/run.sh"; chmod 755 "$wt/deploy/run.sh"; : > "$wt/docker-compose.production.yml"; [[ "$SCENARIO" != mode-0600 ]] || chmod 600 "$wt/server.mjs"; [[ "$SCENARIO" != executable-0700 ]] || chmod 700 "$wt/deploy/run.sh"; [[ "$SCENARIO" != parent-0700 ]] || chmod 700 "$wt/deploy"; [[ "$SCENARIO" != tracked-symlink ]] || { rm "$wt/server.mjs"; ln -s /tmp "$wt/server.mjs"; }; [[ "$SCENARIO" != parent-symlink ]] || { rm -rf "$wt/deploy"; ln -s /tmp "$wt/deploy"; }; printf 'WORKTREE_MODES|%s %s %s\n' "$(/usr/bin/stat -c %a "$wt/server.mjs")" "$(/usr/bin/stat -c %a "$wt/deploy/run.sh" 2>/dev/null || printf missing)" "$(/usr/bin/stat -c %a "$wt/deploy")" >> "$CALLS_FILE";;
   *'rev-parse --is-inside-work-tree'*) printf 'true\\n';;
   *'symbolic-ref -q HEAD'*) exit 1;;
   *'rev-parse HEAD'*) printf '%s\\n' "$SHA";;
-  *'ls-files --stage -z'*) [[ "$SCENARIO" != ls-files-fail ]] || exit 7; [[ "$SCENARIO" != signal-hup ]] || { kill -HUP "$PPID"; exit; }; [[ "$SCENARIO" != signal-term ]] || { kill -TERM "$PPID"; exit; }; [[ "$SCENARIO" != signal-int ]] || { kill -INT "$PPID"; exit; };;
+  *'ls-files --stage -z'*) [[ "$SCENARIO" != ls-files-fail ]] || exit 7; [[ "$SCENARIO" != signal-hup ]] || { kill -HUP "$PPID"; exit; }; [[ "$SCENARIO" != signal-term ]] || { kill -TERM "$PPID"; exit; }; [[ "$SCENARIO" != signal-int ]] || { kill -INT "$PPID"; exit; }; file_mode=100644; [[ "$SCENARIO" != noncanonical-mode ]] || file_mode=120000; printf '%s %040d 0\tserver.mjs\\0' "$file_mode" 0; printf '100755 %040d 0\tdeploy/run.sh\\0' 0; printf '100644 %040d 0\tdocker-compose.production.yml\\0' 0;;
   *'worktree remove'*) [[ "$SCENARIO" != cleanup-remove-fail ]] || exit 8; rm -rf "\${@: -1}";;
 esac`)
-mock('npm'); mock('trivy'); mock('rsync'); mock('sha256sum')
+mock('npm'); mock('trivy', `[[ "$SCENARIO" != gates-change-mode || "$*" != *'--scanners secret'* ]] || chmod 600 "$(<"$WORKTREE_MARK")/server.mjs"`); mock('rsync'); mock('sha256sum')
+mock('stat', `[[ "$SCENARIO" != stat-fail || "$*" != *'/worktree/server.mjs' ]] || exit 17
+exec /usr/bin/stat "$@"`)
 mock('docker', `case "$*" in
   *'image ls --quiet --no-trunc --filter reference=aulas-upds:'*) [[ "$SCENARIO" != docker-query-fail ]] || exit 13; [[ "$SCENARIO" != image-exists ]] || printf 'sha256:%064d\\n' 0; [[ "$SCENARIO" != docker-ambiguous ]] || printf 'unexpected output\\n'; exit 0;;
   *'image inspect aulas-upds:'*) [[ "$SCENARIO" == image-exists || -f "$IMAGE_MARK" ]];;
@@ -50,14 +52,14 @@ after(() => rmSync(root, { recursive: true }))
 const run = (scenario = 'success', input = `${sha}\n`, dry = false) => {
   rmSync(callsFile, { force: true }); rmSync(imageMark, { force: true })
   const result = spawnSync('bash', [join(repo, 'deploy', 'release-production.sh'), ...(dry ? ['--dry-run'] : [])], {
-    encoding: 'utf8', input, env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, RELEASE_IDENTITY: identity, CALLS_FILE: callsFile, IMAGE_MARK: imageMark, REPO: repo, SHA: sha, SCENARIO: scenario },
+    encoding: 'utf8', input, env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, RELEASE_IDENTITY: identity, CALLS_FILE: callsFile, IMAGE_MARK: imageMark, WORKTREE_MARK: worktreeMark, REPO: repo, SHA: sha, SCENARIO: scenario },
   })
   const calls = readFileSync(callsFile, 'utf8'), added = calls.match(/git\|.*worktree add --quiet --detach (\S+) /)
   assert.doesNotMatch(`${result.stdout}${result.stderr}${calls}`, new RegExp(secret)); assert.equal(existsSync(sentinel), true)
   if (added) assert.equal(existsSync(dirname(added[1])), false, 'owned container must be removed')
   return { result, calls }
 }
-const noRsync = ({ result, calls }) => { assert.notEqual(result.status, 0); assert.doesNotMatch(calls, /^rsync\|/m) }
+const noRsync = ({ result, calls }, message) => { assert.notEqual(result.status, 0, message); assert.doesNotMatch(calls, /^rsync\|/m) }
 
 test('dirty, diverged, and unconfirmed releases stop before rsync', () => {
   for (const [scenario, input] of [['dirty', `${sha}\n`], ['diverged', `${sha}\n`], ['success', 'wrong\n']]) noRsync(run(scenario, input))
@@ -76,6 +78,32 @@ test('worktree-add and ls-files failures propagate with owned-only cleanup', () 
     const failed = run(scenario); noRsync(failed); assert.doesNotMatch(failed.calls, /^npm\|/m)
     if (scenario === 'worktree-add-fail') assert.doesNotMatch(failed.calls, /worktree remove/)
   }
+})
+
+test('scoped checkout umask creates canonical regular, executable, and parent modes', () => {
+  const passed = run('cleanup-remove-fail', `${sha}\n`, true)
+  assert.equal(passed.result.status, 0, passed.result.stderr)
+  assert.match(passed.calls, /^WORKTREE_MODES\|644 755 755$/m)
+  assert.match(source, /\(umask 022; git .* worktree add/)
+})
+
+test('exact mode validation fails closed before rsync and cleans only owned artifacts', () => {
+  for (const scenario of ['mode-0600', 'executable-0700', 'parent-0700', 'tracked-symlink', 'parent-symlink', 'noncanonical-mode', 'gates-change-mode', 'stat-fail']) {
+    const failed = run(scenario)
+    noRsync(failed, `${scenario}\n${failed.result.stderr}\n${failed.calls}`)
+    assert.doesNotMatch(failed.calls, /ssh\|.*RELEASE_TAG=/)
+    assert.match(failed.calls, /git\|.*worktree remove --force/)
+    if (scenario === 'gates-change-mode') {
+      assert.match(failed.calls, /trivy\|image .*--scanners secret/)
+      assert.equal((failed.calls.match(/git\|.*ls-files --stage -z/g) || []).length, 2)
+    }
+  }
+})
+
+test('tracked modes are validated after checkout and immediately before rsync', () => {
+  const passed = run('cleanup-remove-fail', `${sha}\n`, true)
+  assert.equal((passed.calls.match(/git\|.*ls-files --stage -z/g) || []).length, 2)
+  assert.match(source, /trivy image[\s\S]*validate_tracked_modes\nrsync/)
 })
 
 test('dry-run certifies locally, opens rsync SSH without mutation, and cleans only owned artifacts', () => {
